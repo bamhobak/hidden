@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.5.9";
+var _bamVersion = "1.0.6.0";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1985,61 +1985,50 @@ function ExtractHiddenText()
 //			const regex = /^\d+[\.\)]\s+/;  
 //			foundText = foundText.replace(regex, '');
 
-			let preAccum = 0;
-
-			if(foundTitleNodeCount <= introTitleNo)
+			// 인덱스(위치) 기반 매핑 - 빈 슬롯을 건너뛰어도 정확히 복원됨
+			if(i === 0)
 			{
-				SetTextValue("bamIntroTitle" + foundTitleNodeCount, foundText);
+				SetTextValue("bamIntroTitle1", foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo)
+			else if(i <= 8)
 			{
-				preAccum = introTitleNo;
-				SetTextValue("bamSubIntroTitle" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSubIntroTitle" + i, foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo)
+			else if(i <= 16)
 			{
-				preAccum = introTitleNo + subIntroTitleNo;
-				SetTextValue("bamSubTitle" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSubTitle" + (i - 8), foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo)
+			else if(i <= 24)
 			{
-				preAccum = introTitleNo + subIntroTitleNo + subTitleNo;
-				SetTextValue("bamSub1Content" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSub1Content" + (i - 16), foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo)
+			else if(i <= 32)
 			{
-				preAccum = introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo;
-				SetTextValue("bamSub2Content" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSub2Content" + (i - 24), foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo)
+			else if(i <= 40)
 			{
-				preAccum = introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo;
-				SetTextValue("bamSub3Content" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSub3Content" + (i - 32), foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo)
+			else if(i <= 48)
 			{
-				preAccum = introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo;
-				SetTextValue("bamSub4Content" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSub4Content" + (i - 40), foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + subSub5ContentNo)
+			else if(i <= 56)
 			{
-				preAccum = introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo;
-				SetTextValue("bamSub5Content" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSub5Content" + (i - 48), foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + subSub5ContentNo + subSub6ContentNo)
+			else if(i <= 64)
 			{
-				preAccum = introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + subSub5ContentNo;
-				SetTextValue("bamSub6Content" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSub6Content" + (i - 56), foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + subSub5ContentNo + subSub6ContentNo + subSub7ContentNo)
+			else if(i <= 72)
 			{
-				preAccum = introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + subSub5ContentNo + subSub6ContentNo;
-				SetTextValue("bamSub7Content" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSub7Content" + (i - 64), foundText);
 			}
-			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + subSub5ContentNo + subSub6ContentNo + subSub7ContentNo + subSub8ContentNo)
+			else if(i <= 80)
 			{
-				preAccum = introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + subSub5ContentNo + subSub6ContentNo + subSub7ContentNo;
-				SetTextValue("bamSub8Content" + (foundTitleNodeCount - preAccum), foundText);
+				SetTextValue("bamSub8Content" + (i - 72), foundText);
 			}
 //			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + closeTitleNo)
 //			{
@@ -2534,7 +2523,7 @@ function AttachJsonNodeTrust2() {
 			let introTitleValue = GetIntroTitle(i + 1);
 
 			//if( introTitleValue !== undefined && introTitleValue !== "" )
-			if( introTitleValue !== undefined )
+			if( introTitleValue !== undefined && introTitleValue.trim() !== "" )
 			{
 				let paragraphText = replaceNodeTitleFontStyle(introTitleValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeIntroTitleFontStyle);
 
@@ -2550,7 +2539,7 @@ function AttachJsonNodeTrust2() {
 			let subIntroTitleValue = GetSubIntroTitle(i + 1);
 
 			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( subIntroTitleValue !== undefined )
+			if( subIntroTitleValue !== undefined && subIntroTitleValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(subIntroTitleValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
@@ -2567,7 +2556,7 @@ function AttachJsonNodeTrust2() {
 			let subTitleValue = GetSubTitle(i + 1);
 
 			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( subTitleValue !== undefined )
+			if( subTitleValue !== undefined && subTitleValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(subTitleValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeSubTitleFontStyle);
@@ -2583,7 +2572,7 @@ function AttachJsonNodeTrust2() {
 			let sub1ContentValue = GetSub1Content(i + 1);
 
 			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( sub1ContentValue !== undefined )
+			if( sub1ContentValue !== undefined && sub1ContentValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(sub1ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
@@ -2599,7 +2588,7 @@ function AttachJsonNodeTrust2() {
 			let sub2ContentValue = GetSub2Content(i + 1);
 
 			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( sub2ContentValue !== undefined )
+			if( sub2ContentValue !== undefined && sub2ContentValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(sub2ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
@@ -2615,7 +2604,7 @@ function AttachJsonNodeTrust2() {
 			let sub3ContentValue = GetSub3Content(i + 1);
 
 			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( sub3ContentValue !== undefined )
+			if( sub3ContentValue !== undefined && sub3ContentValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(sub3ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
@@ -2631,7 +2620,7 @@ function AttachJsonNodeTrust2() {
 			let sub4ContentValue = GetSub4Content(i + 1);
 
 			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( sub4ContentValue !== undefined )
+			if( sub4ContentValue !== undefined && sub4ContentValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(sub4ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
@@ -2646,7 +2635,7 @@ function AttachJsonNodeTrust2() {
 		{
 			let sub5ContentValue = GetSub5Content(i + 1);
 
-			if( sub5ContentValue !== undefined )
+			if( sub5ContentValue !== undefined && sub5ContentValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(sub5ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
@@ -2661,7 +2650,7 @@ function AttachJsonNodeTrust2() {
 		{
 			let sub6ContentValue = GetSub6Content(i + 1);
 
-			if( sub6ContentValue !== undefined )
+			if( sub6ContentValue !== undefined && sub6ContentValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(sub6ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
@@ -2676,7 +2665,7 @@ function AttachJsonNodeTrust2() {
 		{
 			let sub7ContentValue = GetSub7Content(i + 1);
 
-			if( sub7ContentValue !== undefined )
+			if( sub7ContentValue !== undefined && sub7ContentValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(sub7ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
@@ -2691,7 +2680,7 @@ function AttachJsonNodeTrust2() {
 		{
 			let sub8ContentValue = GetSub8Content(i + 1);
 
-			if( sub8ContentValue !== undefined )
+			if( sub8ContentValue !== undefined && sub8ContentValue.trim() !== "" )
 			{
 
 				let paragraphText = replaceNodeTitleFontStyle(sub8ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
