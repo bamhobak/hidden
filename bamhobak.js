@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.6.6";
+var _bamVersion = "1.0.6.7";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -5995,7 +5995,7 @@ function bamSetupChunkedCollapse(idFn, total, chunk) {
 	let btn = document.createElement('button');
 	btn.type = 'button';
 	btn.className = 'bam-more-btn';
-	let shown = chunk;
+	let shown = 0;
 
 	let rowOf = function(n) { let el = document.getElementById(idFn(n)); return el ? el.closest('.input-row') : null; };
 
@@ -6009,7 +6009,7 @@ function bamSetupChunkedCollapse(idFn, total, chunk) {
 	};
 
 	let neededByFilled = function() {
-		let mf = chunk;
+		let mf = 0;
 		for (let n = 1; n <= total; n++) {
 			let el = document.getElementById(idFn(n));
 			if (el && el.value && el.value.trim() !== '') mf = Math.max(mf, Math.ceil(n / chunk) * chunk);
@@ -6018,7 +6018,7 @@ function bamSetupChunkedCollapse(idFn, total, chunk) {
 	};
 
 	btn.addEventListener('click', function() {
-		if (shown >= total) shown = chunk;
+		if (shown >= total) shown = 0;
 		else shown = Math.min(shown + chunk, total);
 		apply();
 	});
