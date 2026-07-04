@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.6.8";
+var _bamVersion = "1.0.6.9";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -5908,6 +5908,8 @@ function extract_hidden_program()
 	ExtractHiddenText();
 	SetCheckboxValue("bamCheckTitleChange", "true");
 	refreshCollapsibleSubContents();
+	// 안전장치: 렌더링/값 반영 후 한 번 더 펼침 시도
+	setTimeout(refreshCollapsibleSubContents, 50);
 }
 
 function init_bamhobak()
