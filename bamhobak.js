@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.6.4";
+var _bamVersion = "1.0.6.5";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -2650,6 +2650,25 @@ function AttachJsonNodeTrust2() {
 				}
 				iCnt++;
 			}
+				else
+				{
+					// 이미지가 하나도 없으면 본문 제일 위에 인사말+내용 등록
+					let insertAt = 0;
+					if( introTitleNodeObjects[iCnt] !== undefined )
+					{
+						componentsObject.splice(insertAt, 0, introTitleNodeObjects[iCnt]);
+						insertAt++;
+					}
+					for(let j = 0; j < subIntroTitleNodeObjects.length; j++)
+					{
+						if( subIntroTitleNodeObjects[j] !== undefined )
+						{
+							componentsObject.splice(insertAt, 0, subIntroTitleNodeObjects[j]);
+							insertAt++;
+						}
+					}
+					iCnt++;
+				}
 		}
 
 
