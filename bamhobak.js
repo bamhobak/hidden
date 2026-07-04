@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.7.0";
+var _bamVersion = "1.0.7.1";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -5905,10 +5905,14 @@ function hide_hidden_program()
 
 function extract_hidden_program()
 {
-	ExtractHiddenText();
-	SetCheckboxValue("bamCheckTitleChange", "true");
+	try {
+		ExtractHiddenText();
+		SetCheckboxValue("bamCheckTitleChange", "true");
+	} catch (ex) {
+		console.log("extract_hidden_program Exception : " + ex);
+	}
+	// 추출 중 예외가 나도 채워진 내용은 펼쳐지도록 항상 실행
 	refreshCollapsibleSubContents();
-	// 안전장치: 렌더링/값 반영 후 한 번 더 펼침 시도
 	setTimeout(refreshCollapsibleSubContents, 50);
 }
 
@@ -5946,11 +5950,21 @@ function bamInit()
     var divElem = mainFrameDocument.getElementsByClassName("blog2_post_function");
 
     var buttonElem = mainFrameDocument.createElement("button");
-    buttonElem.innerHTML = "히든 실행";
+    buttonElem.innerHTML = "🌰 히든 실행";
     //buttonElem.onclick = open_hidden_program;
     buttonElem.id = "bamhobakExecute";
-    buttonElem.className = "url";
-    buttonElem.setAttribute('style', 'font-weight:bold;font-size:18px;color:rgb(255, 0, 0);');
+    buttonElem.type = "button";
+    var _bamBtnBase = 'display:inline-flex;align-items:center;gap:6px;padding:8px 18px;margin-left:8px;'
+        + 'background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#ffffff;font-weight:bold;font-size:14px;'
+        + 'line-height:1;border:none;border-radius:22px;cursor:pointer;'
+        + 'box-shadow:0 3px 8px rgba(46,158,91,0.35);transition:all 0.15s ease;letter-spacing:0.3px;';
+    buttonElem.setAttribute('style', _bamBtnBase);
+    buttonElem.addEventListener('mouseenter', function() {
+        buttonElem.setAttribute('style', _bamBtnBase + 'transform:translateY(-1px);box-shadow:0 5px 12px rgba(46,158,91,0.45);filter:brightness(1.05);');
+    });
+    buttonElem.addEventListener('mouseleave', function() {
+        buttonElem.setAttribute('style', _bamBtnBase);
+    });
 
     buttonElem.addEventListener("click", open_hidden_program);
 
