@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.6.2";
+var _bamVersion = "1.0.6.3";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -415,6 +415,56 @@ var _bamSETitleTextList = [
 		["SE-3073b579-7fda-47aa-a1ea-900db0000d1f", "SE-0ef95a29-f0e6-4b77-893d-4743fefd6ca1", "SE-6005c251-043d-4dab-914b-c5b7463ad74f", "SE-935c3e85-ad82-4692-b704-2627313a6fa6"],
 		["SE-faa9ce4f-7d46-43a4-a12e-bc5b164f62c1", "SE-95be6f71-cbf1-4739-a378-d426b3181a37", "SE-1bb3596d-33cf-42dc-876d-5a64de34f494", "SE-23feb4e7-fcf7-4f85-af54-ab91843ccb96"],
 		["SE-14fd97a8-cfc9-4b14-8765-b0c5cfadb66d", "SE-70dd8730-b8a4-4e5c-8049-c6bd1d636d37", "SE-01c26508-5e45-4e7a-bf74-efe8c5cafb36", "SE-ee9fe5fb-39f6-488f-8349-f7c26b3f71c7"]
+		[ "SE-2a0bb435-8b96-48ba-9261-55f78c5bfc23", "SE-2ff0f594-5848-4a5e-bcda-0980dca2f72f", "SE-378d6c45-99aa-4625-b552-2ee51e0929a3", "SE-33204b66-2171-40ed-9249-83e709fae9e6" ],
+		[ "SE-6bcc9cd1-1b45-4eb7-8df3-5b592a06eba7", "SE-13b27714-3bc8-417e-9a41-e98e81f97c36", "SE-e7804bf8-ce62-44dd-a416-1fe77a274926", "SE-a0dbccae-30e5-49f9-94ce-54a631c363f8" ],
+		[ "SE-0023c15b-b9b4-4af4-9747-a72e5dcce28f", "SE-d2852ce0-21f8-4c18-a7b6-e3ccfcefd9dc", "SE-0b33163e-bdc1-41a8-96eb-caf8a0cd656a", "SE-3ca770f0-70b8-41bd-905b-ac03cb58a8d6" ],
+		[ "SE-b6bcbb09-21cc-410e-b956-8a37bd497c8d", "SE-67fd157c-51b8-4d53-b361-da147ec7df1f", "SE-42b6d10f-0fc6-4949-9142-def47110762e", "SE-7d996168-658e-4cd8-a8a6-18b0ce568dea" ],
+		[ "SE-d00e9365-15d6-4312-ae5a-14ec3a9ddeeb", "SE-0ddc072b-5d3f-4618-81c3-9c4df20b7767", "SE-a93146af-30d5-4886-b407-7b75541b6cf1", "SE-bedf516e-66c3-408a-9dc6-8b65cdb8ddb6" ],
+		[ "SE-a0b5d475-571b-4713-b30d-73ecd934c17d", "SE-590875c4-40b4-4263-afd1-458e8f2691be", "SE-fef70ab6-3657-4fdc-bc91-b59a1bd938a6", "SE-af9a24a5-2095-40f6-9456-545e9c315676" ],
+		[ "SE-a403e499-842a-4dc0-93b6-203e9b8d709b", "SE-e2570442-d3c2-496b-8e7e-17510b2bcb3e", "SE-8aae975d-d32d-4f22-a7b1-e0e7a7f64f52", "SE-8216553f-cd55-4da9-8b36-7e624fec2c15" ],
+		[ "SE-f942c7af-8452-425f-8139-256fe99deb86", "SE-21ed5dce-8140-4013-88f0-58eeb8c3f7e0", "SE-a62fa428-e830-4bbe-954b-273d64bf1006", "SE-3567ef67-a4cd-4174-94b8-dd9586955945" ],
+		[ "SE-0746bdf3-bd49-4e82-a519-8fa3bfa73a72", "SE-ed012d3b-8b0c-4690-bc37-b405535dd41c", "SE-81c0494c-7ea2-4123-8b45-50cf66bc7e14", "SE-07ecd7c1-3679-4104-ac56-80f1f80aac26" ],
+		[ "SE-2cad83f6-6fd9-4416-b7cb-5b4950e195ea", "SE-f361a9e2-1fda-4873-858e-49df137ae97b", "SE-72a3e3bd-a6e3-4f2e-b184-9f791995a5e0", "SE-4d1dbacf-f103-42ce-9835-88bcf641f9e9" ],
+		[ "SE-3d0a21f1-ba6e-48f6-8576-6e22a6d7cdbd", "SE-7f12f93c-3fa4-4d4d-afa4-febcbcc53e36", "SE-a690e0a1-cbc5-4509-acd5-eeb7fc30fce3", "SE-bfa088e5-707b-4166-be3b-29cdacb92774" ],
+		[ "SE-44d0a929-fe37-43e4-8b6e-0d4a60967a82", "SE-b3b029a7-1659-46a7-b87d-bac30047b45e", "SE-3d92c05b-c093-46e8-8ec5-e08c1b81a515", "SE-ac43c8f2-328b-4100-a566-561fa4a323ee" ],
+		[ "SE-0f426d69-e888-4b43-aeaa-9518aa6981a6", "SE-943516f1-972c-479d-8bf4-e7c3125ccc7f", "SE-ff49953f-1294-497f-a0a5-5dc8f068ac65", "SE-f3732156-00eb-492c-8209-feedd1b2dc63" ],
+		[ "SE-4422beea-937a-46f0-943a-779acc1fe43b", "SE-94226c42-693f-480f-8759-6efc002208fb", "SE-c7412210-7441-4aa2-8965-1d7f423f9244", "SE-4498a333-332c-4d46-8013-56b3aaae8d62" ],
+		[ "SE-b0f9689b-901b-4539-9845-1f6ded9dfe3a", "SE-84c3fbd4-122c-49c0-9f68-fb564e959de3", "SE-d8ba9f83-a0a9-498a-a0e1-896a5e86a4ba", "SE-68a7d78f-84ca-4377-afcc-c1aa115f5d0c" ],
+		[ "SE-21b0c54b-ebe0-45e5-bc30-54155eee8b5d", "SE-cd074df9-7655-4abf-8e17-6d0386740bc8", "SE-f07644c4-7a3f-4fc2-8fba-1b4bfcea8ea7", "SE-81f06570-778f-48ba-a5c3-411602e54d67" ],
+		[ "SE-8df58300-4829-48d8-983a-4d2fd3c54d6b", "SE-a0a28694-f621-4cdf-bcc0-19555d704ace", "SE-374e285a-3f89-4b52-a894-727eec6a385c", "SE-fcef74b7-bc49-48a0-b270-6901d9a29b2d" ],
+		[ "SE-ad3c8ba7-adf4-41db-9510-90c78bb5f22a", "SE-9de33e1a-218e-489f-a092-81b06dacd2b9", "SE-e7d8315f-0aed-4db6-be02-7fd525713ded", "SE-310e8f73-b3f7-4dcf-a23f-98a90d3f773c" ],
+		[ "SE-04bb3841-9d34-4150-8ba6-88b88abefad7", "SE-c9f5fc82-ecbb-4de8-95b2-fdad27767590", "SE-82d55a25-d0f6-42cf-b24e-c9e60dd2fe77", "SE-4b1936ef-fc67-4c04-9a7a-54c0b466d0b0" ],
+		[ "SE-f0bd7126-1ea9-4dfc-92d6-44dce9f42c71", "SE-a44fe79a-a051-47b3-af22-dbab26965689", "SE-b56167d6-afc8-4c69-a3d9-a07ac3f2bd5a", "SE-5f5febd0-e9ec-4604-99b2-7bc35fddacee" ],
+		[ "SE-494357a4-898f-40be-b2f5-9232ed30ca90", "SE-93176b50-ec26-4e26-b45f-5c797896f2f7", "SE-32eed194-61ff-4426-b1f2-a812ac69b1e6", "SE-34939065-6bb7-495b-a55a-b985db80a638" ],
+		[ "SE-c6b6acb2-bdf1-4f70-b673-acd58b5093d0", "SE-28988d3e-7966-4328-8782-1bbf162b5cfb", "SE-77491376-49f3-482e-8bb3-4a06f342cd43", "SE-9a1b53d5-c732-4af7-b257-0d39d37c690e" ],
+		[ "SE-bca1660c-497e-419b-909e-7bc951970dd1", "SE-29b668a6-b78c-4ecb-9391-ee4f73cde57f", "SE-d0fb74db-660f-4c52-bd09-a60690b2b72f", "SE-5ca28679-d1bb-4425-af4f-709ecef2104c" ],
+		[ "SE-a12312e9-2c44-4af2-860f-5aabafc0bb80", "SE-04c0575a-7e22-4b11-a1af-7ff20993441d", "SE-424d1b53-e4af-492b-b38d-1c624bc87b43", "SE-cbfe232a-8222-4087-a400-11420b525835" ],
+		[ "SE-210288b1-56c0-412f-8850-d870b88003b1", "SE-67c240d7-2d51-46bf-ae36-3d0a71e426d1", "SE-1c4b26d6-db34-4285-b239-47f2dbc495cd", "SE-3ad8c1da-a7c3-4c3b-a55f-ba30d21f858b" ],
+		[ "SE-6000928c-4493-4a1b-8153-d83f7f672461", "SE-57b18ba1-b6b2-40b3-b724-994912f0295a", "SE-2d59b0c8-60ab-4747-b59b-7065edd49cf2", "SE-f61fd3a9-8e49-4a09-8dd5-af8b4bfa70e9" ],
+		[ "SE-c04eddb5-a50a-4050-94cf-f1985f232511", "SE-44f70044-fb7c-4058-9b52-c54fe9b1c97c", "SE-3a9923bd-cbd4-4c75-93ae-834d473da8a2", "SE-78d7a2fb-a45a-424c-a14d-72777242d91f" ],
+		[ "SE-6594c74c-d826-42d1-9333-30219d94b3ea", "SE-9563f5c4-e612-49b3-a024-203222883213", "SE-37948a4b-b00f-48e9-897f-a94660a47717", "SE-be4faebf-8fd8-4966-b198-bd7f60f88e50" ],
+		[ "SE-f3fed08b-eb9c-4f58-a65c-57d70ce573e8", "SE-98227a6d-0d22-421a-9e47-d27f9e6baf39", "SE-25ef5337-f964-4c68-832f-2fd8799153d3", "SE-79431321-e648-4d35-832b-323e3e2b2418" ],
+		[ "SE-693dcbea-bb6b-45cc-8b60-e3cf00bd8b59", "SE-95ee210e-213c-45be-bbdb-fd3fbf948ef2", "SE-06e813b5-f50b-423e-a481-6ff6f1bac1d0", "SE-f37e4af3-0e98-47ab-90a2-db7ffc4cc2a1" ],
+		[ "SE-ef62bff0-a6eb-4360-8d45-023dfdac734d", "SE-d7adccfd-6009-4a65-b664-901bae376ea6", "SE-5c3a992e-973b-40d7-ae4f-9faab68523df", "SE-5da1eccf-fa0a-475f-af9a-3e931cd65456" ],
+		[ "SE-15715fcc-907c-47c1-8d79-3acba8621d69", "SE-8691c035-71f2-4215-8cd1-b729cd3a24b8", "SE-d1a3fc74-f0c1-47fc-98be-a003cfe18155", "SE-10493679-3a2c-400f-a85e-3fbb36e60087" ],
+		[ "SE-a545d1c3-3535-466b-9087-fffb191d8822", "SE-be4e1bfa-5007-47ab-9bb1-b57c75917ba1", "SE-cf9efe4d-5e8a-4b2f-be12-7c3c7ebd0a6f", "SE-64540655-b37c-48fb-b0e2-1e5ced074fe6" ],
+		[ "SE-2cf436d3-4fc5-49f1-b817-d1c641aa9cf7", "SE-9c07cf3a-d643-4fd9-8170-8bebe4541100", "SE-da7905d8-8bbf-436f-8798-6985322b6458", "SE-b81cef24-4408-4126-9153-bfc210db5623" ],
+		[ "SE-2a4b0c27-7b07-4323-b6a0-5226b1349a52", "SE-6eb3f066-9952-4018-8218-a53b96cfeda7", "SE-27653f75-0076-485b-b761-332da78adbf9", "SE-8e1f4819-48f3-40d1-8bf9-bbb95893420b" ],
+		[ "SE-a06c2525-80eb-4aa3-bfb8-b73572ac7927", "SE-0cf4142d-acb4-4aa4-99c4-f414daf5b8b9", "SE-ffde250c-0a44-4ed6-b0a4-5482b4d349ae", "SE-e9d7dd5b-5ff7-4db8-9f9b-b572aef5c8f4" ],
+		[ "SE-4333f5d1-197b-4c23-ac84-3bb676dcd9ff", "SE-ad49defe-dd53-4395-b5bc-9bcf53a2913b", "SE-66844f34-3199-4c1b-b980-3e246ab5e524", "SE-d8554dba-37b3-4eab-bafc-bc64b4922581" ],
+		[ "SE-0315504a-ea29-45b6-988f-8d9f39b43d70", "SE-7d4d4220-016a-4431-a384-9b6bbbfdd4f7", "SE-4e6133d9-3d61-476d-94eb-afd52b526cae", "SE-cdb6b9f6-a45f-463b-b178-9de057110a38" ],
+		[ "SE-c93d1e48-8e1f-4d68-a6f4-2a2eb3170b55", "SE-8b997083-a1f3-4651-8ffb-d9e4ac8d7c06", "SE-2b2c61d0-0451-4041-99bd-9b0aece004e9", "SE-a2d5e8ed-81b5-4000-ac4c-5afdadd62c97" ],
+		[ "SE-d3c8649a-297d-48c7-b0fb-8914fcce52a1", "SE-988a92a3-8578-4235-a5d2-e45f8353fbb8", "SE-58c03e00-490d-438c-98d6-250f5d79cbf3", "SE-a707bb10-03ec-4856-86b5-1f3f42f58c56" ],
+		[ "SE-04fd95d1-227c-4817-add7-acbe90c41e84", "SE-228e1e82-1ab4-4cca-85cc-4834c7348baa", "SE-668f43a0-7178-4c0e-b435-23fe2cd7302f", "SE-71f284cd-97d8-4f70-82e6-1fb2a0a8e76d" ],
+		[ "SE-55217625-d55a-45ef-a33b-1587d08ae3f6", "SE-14b54214-6a3f-446d-a88b-d645052bacf8", "SE-d104807f-45f9-415f-b241-929ae80e5cbc", "SE-43bdbab3-e0b1-41c5-a8ed-8bfa225b6b58" ],
+		[ "SE-b38df88b-7b71-4ca6-b325-9f7cf69e48a5", "SE-427a903b-75e4-4f38-b9f8-428e7c372525", "SE-1f2283df-a458-4595-8b19-c13502536b97", "SE-35902794-2f0c-42ac-b7ad-bf91f2df50b2" ],
+		[ "SE-424e84e5-4a68-483a-be47-f137c57bb109", "SE-59323837-02ca-4e61-98e9-9cb53455daff", "SE-43b2bdce-1443-4568-99c6-42fed1427c0c", "SE-f069dbf7-2b1a-4cdf-8919-54e38a320f62" ],
+		[ "SE-d3aa19ea-f0da-4607-8d66-b94786e22e1a", "SE-46add4dc-1aed-4ce2-8360-ac48f1a2ceb5", "SE-a1680c8c-bce7-4918-bbdc-1441e96a205d", "SE-59996e47-a9ff-442b-a648-b47247e1eb57" ],
+		[ "SE-afe18dd8-4fd1-4dac-84f2-afa8b18b86a4", "SE-f3311574-cf2c-4e0a-81a9-cd0fd5afbe89", "SE-e4d5a693-ec1f-4c99-a4c1-c4c9543fb58b", "SE-a2bb4286-ea06-492e-83bb-f8c6f7745fa0" ],
+		[ "SE-e29c8f4b-607b-42cc-bcc1-a8d0ae5e2069", "SE-5e1d2437-a09a-45ac-a59d-07f9f10d2efb", "SE-a1d02720-d5a7-4279-af08-a399fbc1fa8f", "SE-e7103e16-f6ae-4c15-a80f-2eeb58e3fc42" ],
+		[ "SE-a29625fe-14c0-45ac-9905-c134e718c24b", "SE-66987fce-a5da-427e-8f56-6f54040d13aa", "SE-74b31fc7-716c-4fb5-91ca-31f4573ec8eb", "SE-34120bea-51a8-4b94-8af1-4554e11cf595" ],
+		[ "SE-76f900a0-71df-4b2c-9302-8e8ab4b2d815", "SE-a2fd71c6-f805-45af-a15b-ba7831f249dd", "SE-b47124af-19b8-42b2-aa2b-1778128ce4ba", "SE-d6512bb0-cb52-465b-bde5-bd7d798d04b2" ],
+		[ "SE-bc7274ac-37f5-438a-8315-290abf10ca39", "SE-1875d350-05e3-4b70-8f48-dd37bfa46a52", "SE-c3160d34-87f4-4efa-b838-25b0f64f0679", "SE-dc2e1417-cfab-46c4-9aba-3228c45271ac" ],
 ];
 
 
@@ -1986,49 +2036,24 @@ function ExtractHiddenText()
 //			foundText = foundText.replace(regex, '');
 
 			// 인덱스(위치) 기반 매핑 - 빈 슬롯을 건너뛰어도 정확히 복원됨
+			// 0:인사말제목 | 1..16:인사말내용 | 17..24:소제목 | 25..152:소제목내용(내용16 x 그룹8)
 			if(i === 0)
 			{
 				SetTextValue("bamIntroTitle1", foundText);
 			}
-			else if(i <= 8)
+			else if(i <= 16)
 			{
 				SetTextValue("bamSubIntroTitle" + i, foundText);
 			}
-			else if(i <= 16)
-			{
-				SetTextValue("bamSubTitle" + (i - 8), foundText);
-			}
 			else if(i <= 24)
 			{
-				SetTextValue("bamSub1Content" + (i - 16), foundText);
+				SetTextValue("bamSubTitle" + (i - 16), foundText);
 			}
-			else if(i <= 32)
+			else if(i <= 152)
 			{
-				SetTextValue("bamSub2Content" + (i - 24), foundText);
-			}
-			else if(i <= 40)
-			{
-				SetTextValue("bamSub3Content" + (i - 32), foundText);
-			}
-			else if(i <= 48)
-			{
-				SetTextValue("bamSub4Content" + (i - 40), foundText);
-			}
-			else if(i <= 56)
-			{
-				SetTextValue("bamSub5Content" + (i - 48), foundText);
-			}
-			else if(i <= 64)
-			{
-				SetTextValue("bamSub6Content" + (i - 56), foundText);
-			}
-			else if(i <= 72)
-			{
-				SetTextValue("bamSub7Content" + (i - 64), foundText);
-			}
-			else if(i <= 80)
-			{
-				SetTextValue("bamSub8Content" + (i - 72), foundText);
+				let c = Math.floor((i - 25) / 8) + 1;
+				let g = ((i - 25) % 8) + 1;
+				SetTextValue("bamSub" + c + "Content" + g, foundText);
 			}
 //			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + closeTitleNo)
 //			{
@@ -2533,19 +2558,17 @@ function AttachJsonNodeTrust2() {
 		}
 
 
-		// SubIntroTitle 노드 정의
-		for(let i = 0; i < 8; i++)
+		// SubIntroTitle 노드 정의 (인사말 내용 1..16)
+		for(let i = 0; i < 16; i++)
 		{
-			let subIntroTitleValue = GetSubIntroTitle(i + 1);
+			let el = document.getElementById('bamSubIntroTitle' + (i + 1));
+			let subIntroTitleValue = el ? removeControlCharacters(el.value) : undefined;
 
-			//if( subTitleValue !== undefined && subTitleValue !== "" )
 			if( subIntroTitleValue !== undefined && subIntroTitleValue.trim() !== "" )
 			{
-
 				let paragraphText = replaceNodeTitleFontStyle(subIntroTitleValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
-
 				subIntroTitleNodeObjects[i] = JSON.parse(paragraphText);
-			}            
+			}
 			randomTitleIndex++;
 		}
 
@@ -2566,130 +2589,23 @@ function AttachJsonNodeTrust2() {
 			randomTitleIndex++;
 		}
 
-		// Sub1Content 노드 정의
-		for(let i = 0; i < 8; i++)
+		// 내용 노드 정의 (내용번호 c=1..16, 그룹 g=1..8)
+		let contentNodeObjects = [];
+		for (let c = 1; c <= 16; c++)
 		{
-			let sub1ContentValue = GetSub1Content(i + 1);
-
-			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( sub1ContentValue !== undefined && sub1ContentValue.trim() !== "" )
+			contentNodeObjects[c] = [];
+			for (let i = 0; i < 8; i++)
 			{
-
-				let paragraphText = replaceNodeTitleFontStyle(sub1ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
-
-				sub1ContentNodeObjects[i] = JSON.parse(paragraphText);
-			}            
-			randomTitleIndex++;
-		}
-
-		// Sub2Content 노드 정의
-		for(let i = 0; i < 8; i++)
-		{
-			let sub2ContentValue = GetSub2Content(i + 1);
-
-			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( sub2ContentValue !== undefined && sub2ContentValue.trim() !== "" )
-			{
-
-				let paragraphText = replaceNodeTitleFontStyle(sub2ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
-
-				sub2ContentNodeObjects[i] = JSON.parse(paragraphText);
-			}            
-			randomTitleIndex++;
-		}
-
-		// Sub3Content 노드 정의
-		for(let i = 0; i < 8; i++)
-		{
-			let sub3ContentValue = GetSub3Content(i + 1);
-
-			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( sub3ContentValue !== undefined && sub3ContentValue.trim() !== "" )
-			{
-
-				let paragraphText = replaceNodeTitleFontStyle(sub3ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
-
-				sub3ContentNodeObjects[i] = JSON.parse(paragraphText);
-			}            
-			randomTitleIndex++;
-		}
-
-		// Sub4Content 노드 정의
-		for(let i = 0; i < 8; i++)
-		{
-			let sub4ContentValue = GetSub4Content(i + 1);
-
-			//if( subTitleValue !== undefined && subTitleValue !== "" )
-			if( sub4ContentValue !== undefined && sub4ContentValue.trim() !== "" )
-			{
-
-				let paragraphText = replaceNodeTitleFontStyle(sub4ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
-
-				sub4ContentNodeObjects[i] = JSON.parse(paragraphText);
+				let el = document.getElementById('bamSub' + c + 'Content' + (i + 1));
+				let val = el ? removeControlCharacters(el.value) : undefined;
+				if (val !== undefined && val.trim() !== "")
+				{
+					let paragraphText = replaceNodeTitleFontStyle(val, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
+					contentNodeObjects[c][i] = JSON.parse(paragraphText);
+				}
+				randomTitleIndex++;
 			}
-			randomTitleIndex++;
 		}
-
-		// Sub5Content 노드 정의
-		for(let i = 0; i < 8; i++)
-		{
-			let sub5ContentValue = GetSub5Content(i + 1);
-
-			if( sub5ContentValue !== undefined && sub5ContentValue.trim() !== "" )
-			{
-
-				let paragraphText = replaceNodeTitleFontStyle(sub5ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
-
-				sub5ContentNodeObjects[i] = JSON.parse(paragraphText);
-			}
-			randomTitleIndex++;
-		}
-
-		// Sub6Content 노드 정의
-		for(let i = 0; i < 8; i++)
-		{
-			let sub6ContentValue = GetSub6Content(i + 1);
-
-			if( sub6ContentValue !== undefined && sub6ContentValue.trim() !== "" )
-			{
-
-				let paragraphText = replaceNodeTitleFontStyle(sub6ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
-
-				sub6ContentNodeObjects[i] = JSON.parse(paragraphText);
-			}
-			randomTitleIndex++;
-		}
-
-		// Sub7Content 노드 정의
-		for(let i = 0; i < 8; i++)
-		{
-			let sub7ContentValue = GetSub7Content(i + 1);
-
-			if( sub7ContentValue !== undefined && sub7ContentValue.trim() !== "" )
-			{
-
-				let paragraphText = replaceNodeTitleFontStyle(sub7ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
-
-				sub7ContentNodeObjects[i] = JSON.parse(paragraphText);
-			}
-			randomTitleIndex++;
-		}
-
-		// Sub8Content 노드 정의
-		for(let i = 0; i < 8; i++)
-		{
-			let sub8ContentValue = GetSub8Content(i + 1);
-
-			if( sub8ContentValue !== undefined && sub8ContentValue.trim() !== "" )
-			{
-
-				let paragraphText = replaceNodeTitleFontStyle(sub8ContentValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
-
-				sub8ContentNodeObjects[i] = JSON.parse(paragraphText);
-			}
-			randomTitleIndex++;
-		}
-
 
 
 //		// CloseTitle 노드 정의
@@ -2755,146 +2671,43 @@ function AttachJsonNodeTrust2() {
 			}
 		}
 
-		// 입력 (sub1Content)
-		for(let i = 0; i < indexOfHiddenSub1Content.length; i++)
+		// 내용 삽입 (내용번호 c=1..16)
+		let indexOfHiddenContent = [2, 3, 4, 5, 6, 7, 8, 9];
+		for (let c = 1; c <= 16; c++)
 		{
-			let index = indexOfHiddenSub1Content[i] - 1;
-
-			if( extraTargetComponents[index] !== undefined )
+			let cCnt = 0;
+			for (let i = 0; i < indexOfHiddenContent.length; i++)
 			{
-				if( sub1ContentNodeObjects[s1Cnt] !== undefined )
+				let index = indexOfHiddenContent[i] - 1;
+				if (extraTargetComponents[index] !== undefined)
 				{
-					let nodeObject = sub1ContentNodeObjects[s1Cnt];
-
-					componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, nodeObject);		// 앞에 삽입
-					//componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]) + 1, 0, nodeObject);		// 뒤에 삽입
+					if (contentNodeObjects[c][cCnt] !== undefined)
+					{
+						let nodeObject = contentNodeObjects[c][cCnt];
+						componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, nodeObject);
+					}
+					cCnt++;
 				}
-				s1Cnt++;
 			}
 		}
 
-		// 입력 (sub2Content)
-		for(let i = 0; i < indexOfHiddenSub2Content.length; i++)
+		// 이미지 슬롯 수(availSlots)보다 많은 소제목/내용은 짤리지 않고 본문 맨 아래에 순서대로 이어붙임
+		let availSlots = 0;
+		for (let i = 0; i < indexOfHiddenContent.length; i++)
 		{
-			let index = indexOfHiddenSub2Content[i] - 1;
+			if (extraTargetComponents[indexOfHiddenContent[i] - 1] !== undefined) availSlots++;
+		}
+		for (let g = availSlots; g < 8; g++)
+		{
+			if (subTitleNodeObjects[g] !== undefined)
+				componentsObject.push(subTitleNodeObjects[g]);
 
-			if( extraTargetComponents[index] !== undefined )
+			for (let c = 1; c <= 16; c++)
 			{
-				if( sub2ContentNodeObjects[s2Cnt] !== undefined )
-				{
-					let nodeObject = sub2ContentNodeObjects[s2Cnt];
-
-					componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, nodeObject);		// 앞에 삽입
-					//componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]) + 1, 0, nodeObject);		// 뒤에 삽입
-				}
-				s2Cnt++;
+				if (contentNodeObjects[c] !== undefined && contentNodeObjects[c][g] !== undefined)
+					componentsObject.push(contentNodeObjects[c][g]);
 			}
 		}
-
-		// 입력 (sub3Content)
-		for(let i = 0; i < indexOfHiddenSub3Content.length; i++)
-		{
-			let index = indexOfHiddenSub3Content[i] - 1;
-
-			if( extraTargetComponents[index] !== undefined )
-			{
-				if( sub3ContentNodeObjects[s3Cnt] !== undefined )
-				{
-					let nodeObject = sub3ContentNodeObjects[s3Cnt];
-
-					componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, nodeObject);		// 앞에 삽입
-					//componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]) + 1, 0, nodeObject);		// 뒤에 삽입
-				}
-				s3Cnt++;
-			}
-		}
-
-		// 입력 (sub4Content)
-		for(let i = 0; i < indexOfHiddenSub4Content.length; i++)
-		{
-			let index = indexOfHiddenSub4Content[i] - 1;
-
-			if( extraTargetComponents[index] !== undefined )
-			{
-				if( sub4ContentNodeObjects[s4Cnt] !== undefined )
-				{
-					let nodeObject = sub4ContentNodeObjects[s4Cnt];
-
-					componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, nodeObject);		// 앞에 삽입
-					//componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]) + 1, 0, nodeObject);		// 뒤에 삽입
-				}
-				s4Cnt++;
-			}
-		}
-
-		// 입력 (sub5Content)
-		for(let i = 0; i < indexOfHiddenSub5Content.length; i++)
-		{
-			let index = indexOfHiddenSub5Content[i] - 1;
-
-			if( extraTargetComponents[index] !== undefined )
-			{
-				if( sub5ContentNodeObjects[s5Cnt] !== undefined )
-				{
-					let nodeObject = sub5ContentNodeObjects[s5Cnt];
-
-					componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, nodeObject);		// 앞에 삽입
-				}
-				s5Cnt++;
-			}
-		}
-
-		// 입력 (sub6Content)
-		for(let i = 0; i < indexOfHiddenSub6Content.length; i++)
-		{
-			let index = indexOfHiddenSub6Content[i] - 1;
-
-			if( extraTargetComponents[index] !== undefined )
-			{
-				if( sub6ContentNodeObjects[s6Cnt] !== undefined )
-				{
-					let nodeObject = sub6ContentNodeObjects[s6Cnt];
-
-					componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, nodeObject);		// 앞에 삽입
-				}
-				s6Cnt++;
-			}
-		}
-
-		// 입력 (sub7Content)
-		for(let i = 0; i < indexOfHiddenSub7Content.length; i++)
-		{
-			let index = indexOfHiddenSub7Content[i] - 1;
-
-			if( extraTargetComponents[index] !== undefined )
-			{
-				if( sub7ContentNodeObjects[s7Cnt] !== undefined )
-				{
-					let nodeObject = sub7ContentNodeObjects[s7Cnt];
-
-					componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, nodeObject);		// 앞에 삽입
-				}
-				s7Cnt++;
-			}
-		}
-
-		// 입력 (sub8Content)
-		for(let i = 0; i < indexOfHiddenSub8Content.length; i++)
-		{
-			let index = indexOfHiddenSub8Content[i] - 1;
-
-			if( extraTargetComponents[index] !== undefined )
-			{
-				if( sub8ContentNodeObjects[s8Cnt] !== undefined )
-				{
-					let nodeObject = sub8ContentNodeObjects[s8Cnt];
-
-					componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, nodeObject);		// 앞에 삽입
-				}
-				s8Cnt++;
-			}
-		}
-
 
 
 //		// 끝인사 삽입
@@ -6131,106 +5944,156 @@ function bamInit()
 
 var _bamCollapsibleRefreshers = [];
 
-// 각 소제목 그룹의 내용5~8을 기본 접힘 처리하고 "＋ 더보기" 토글 버튼을 추가한다.
-// (입력창 노출만 제어할 뿐, 삽입/추출 로직은 그대로 8개 슬롯을 사용한다.)
-function setupCollapsibleSubContents() {
-	_bamCollapsibleRefreshers = [];
+// 내용 입력 row 하나를 동적으로 만들어 afterRow 뒤에 삽입한다.
+function bamAddContentRow(afterRow, id, labelText) {
+	let row = document.createElement('div');
+	row.className = 'input-row';
+	let label = document.createElement('label');
+	label.textContent = labelText;
+	let ta = document.createElement('textarea');
+	ta.id = id;
+	ta.setAttribute('rows', '1');
+	row.appendChild(label);
+	row.appendChild(ta);
+	afterRow.parentNode.insertBefore(row, afterRow.nextSibling);
+	return row;
+}
 
-	for (let g = 1; g <= 8; g++) {
-		let rows = [];
-		for (let c = 5; c <= 8; c++) {
-			let ta = document.getElementById('bamSub' + c + 'Content' + g);
-			if (ta) {
-				let row = ta.closest('.input-row');
-				if (row) rows.push(row);
-			}
-		}
-		if (rows.length === 0) continue;
-
-		let anchorTa = document.getElementById('bamSub4Content' + g);
-		if (!anchorTa) continue;
-		let anchor = anchorTa.closest('.input-row');
-		if (!anchor) continue;
-
-		let btn = document.createElement('button');
-		btn.type = 'button';
-		btn.className = 'bam-more-btn';
-
-		let setState = function(expanded) {
-			for (let i = 0; i < rows.length; i++) {
-				rows[i].style.display = expanded ? '' : 'none';
-			}
-			btn.textContent = expanded ? '－ 내용 5~8 접기' : '＋ 내용 5~8 더보기';
-			btn.setAttribute('data-expanded', expanded ? '1' : '0');
-		};
-
-		btn.addEventListener('click', function() {
-			setState(btn.getAttribute('data-expanded') !== '1');
-		});
-
-		// 초기 상태: 5~8 중 값이 있으면 펼침, 없으면 접힘
-		let hasVal = false;
-		for (let i = 0; i < rows.length; i++) {
-			let t = rows[i].querySelector('textarea');
-			if (t && t.value.trim() !== '') { hasVal = true; break; }
-		}
-		setState(hasVal);
-
-		let btnRow = document.createElement('div');
-		btnRow.className = 'input-row bam-more-row';
-		btnRow.appendChild(btn);
-		anchor.parentNode.insertBefore(btnRow, anchor.nextSibling);
-
-		// 추출 후 값이 채워지면 자동으로 펼치기 위한 refresher 등록
-		_bamCollapsibleRefreshers.push(function() {
-			for (let i = 0; i < rows.length; i++) {
-				let t = rows[i].querySelector('textarea');
-				if (t && t.value.trim() !== '') { setState(true); return; }
-			}
-		});
+// idFn(n) 형태의 시리즈에서 fromN..toN 칸을 동적으로 추가한다.
+function bamExpandSeries(idFn, fromN, toN, labelFn) {
+	let prevEl = document.getElementById(idFn(fromN - 1));
+	if (!prevEl) return;
+	let prevRow = prevEl.closest('.input-row');
+	for (let n = fromN; n <= toN; n++) {
+		let exist = document.getElementById(idFn(n));
+		if (exist) { prevRow = exist.closest('.input-row'); continue; }
+		prevRow = bamAddContentRow(prevRow, idFn(n), labelFn(n));
 	}
 }
 
-// 추출 등으로 값이 채워졌을 때 접힌 그룹을 다시 펼친다.
+// idFn(n) (n=1..total) 시리즈를 chunk(4)개 단위로 접고 "＋더보기" 버튼으로 펼친다.
+function bamSetupChunkedCollapse(idFn, total, chunk) {
+	let btn = document.createElement('button');
+	btn.type = 'button';
+	btn.className = 'bam-more-btn';
+	let shown = chunk;
+
+	let rowOf = function(n) { let el = document.getElementById(idFn(n)); return el ? el.closest('.input-row') : null; };
+
+	let apply = function() {
+		for (let n = 1; n <= total; n++) {
+			let r = rowOf(n);
+			if (r) r.style.display = (n <= shown) ? '' : 'none';
+		}
+		if (shown >= total) btn.textContent = '－ 접기';
+		else btn.textContent = '＋ 내용 ' + (shown + 1) + '~' + Math.min(shown + chunk, total) + ' 더보기';
+	};
+
+	let neededByFilled = function() {
+		let mf = chunk;
+		for (let n = 1; n <= total; n++) {
+			let el = document.getElementById(idFn(n));
+			if (el && el.value && el.value.trim() !== '') mf = Math.max(mf, Math.ceil(n / chunk) * chunk);
+		}
+		return mf;
+	};
+
+	btn.addEventListener('click', function() {
+		if (shown >= total) shown = chunk;
+		else shown = Math.min(shown + chunk, total);
+		apply();
+	});
+
+	shown = neededByFilled();
+	apply();
+
+	let lastRow = rowOf(total);
+	if (lastRow) {
+		let btnRow = document.createElement('div');
+		btnRow.className = 'input-row bam-more-row';
+		btnRow.appendChild(btn);
+		lastRow.parentNode.insertBefore(btnRow, lastRow.nextSibling);
+	}
+
+	_bamCollapsibleRefreshers.push(function() {
+		let need = neededByFilled();
+		if (need > shown) { shown = need; apply(); }
+	});
+}
+
+// 인사말/각 소제목 내용을 1..16으로 확장하고 4개 단위로 접는다.
+function setupCollapsibleSubContents() {
+	_bamCollapsibleRefreshers = [];
+
+	// 인사말 내용 1..16
+	let introFn = function(n){ return 'bamSubIntroTitle' + n; };
+	bamExpandSeries(introFn, 9, 16, function(n){ return '내용' + n; });
+	bamSetupChunkedCollapse(introFn, 16, 4);
+
+	// 각 소제목 내용 1..16
+	for (let g = 1; g <= 8; g++) {
+		let idFn = (function(g){ return function(c){ return 'bamSub' + c + 'Content' + g; }; })(g);
+		bamExpandSeries(idFn, 9, 16, function(c){ return '내용' + c; });
+		bamSetupChunkedCollapse(idFn, 16, 4);
+	}
+}
+
+// 추출 등으로 값이 채워졌을 때 접힌 칸을 다시 펼친다.
 function refreshCollapsibleSubContents() {
 	for (let i = 0; i < _bamCollapsibleRefreshers.length; i++) {
 		_bamCollapsibleRefreshers[i]();
 	}
 }
 
-// 특정 내용 입력창이 속한 "같은 그룹의 내용 입력창 목록"과 그 안에서의 위치를 반환한다.
+// 붙여넣기 문단 분배용: 입력창이 속한 "섹션 시리즈"와 그 안 위치를 반환한다.
+// 소제목 그룹: [소제목, 내용1..16] / 인사말: [인사말제목, 인사말내용1..16]
 function bamGetContentSeries(el) {
 	let id = el.id;
-	let m = id.match(/^bamSub([1-8])Content([1-8])$/);
-	if (m) {
-		let g = m[2];
-		let series = [];
-		for (let c = 1; c <= 8; c++) series.push(document.getElementById('bamSub' + c + 'Content' + g));
-		return { series: series, start: parseInt(m[1], 10) - 1 };
-	}
-	m = id.match(/^bamSubIntroTitle([1-8])$/);
-	if (m) {
-		let series = [];
-		for (let n = 1; n <= 8; n++) series.push(document.getElementById('bamSubIntroTitle' + n));
-		return { series: series, start: parseInt(m[1], 10) - 1 };
-	}
+	let m;
+
 	m = id.match(/^bamSubTitle([1-8])$/);
 	if (m) {
-		let series = [];
-		for (let s = 1; s <= 8; s++) series.push(document.getElementById('bamSubTitle' + s));
-		return { series: series, start: parseInt(m[1], 10) - 1 };
+		let g = m[1];
+		let series = [ document.getElementById('bamSubTitle' + g) ];
+		for (let c = 1; c <= 16; c++) series.push(document.getElementById('bamSub' + c + 'Content' + g));
+		return { series: series, start: 0 };
 	}
+
+	m = id.match(/^bamSub([0-9]+)Content([1-8])$/);
+	if (m) {
+		let c0 = parseInt(m[1], 10);
+		let g = m[2];
+		let series = [ document.getElementById('bamSubTitle' + g) ];
+		for (let c = 1; c <= 16; c++) series.push(document.getElementById('bamSub' + c + 'Content' + g));
+		return { series: series, start: c0 };
+	}
+
+	if (id === 'bamIntroTitle1') {
+		let series = [ document.getElementById('bamIntroTitle1') ];
+		for (let n = 1; n <= 16; n++) series.push(document.getElementById('bamSubIntroTitle' + n));
+		return { series: series, start: 0 };
+	}
+
+	m = id.match(/^bamSubIntroTitle([0-9]+)$/);
+	if (m) {
+		let n0 = parseInt(m[1], 10);
+		let series = [ document.getElementById('bamIntroTitle1') ];
+		for (let n = 1; n <= 16; n++) series.push(document.getElementById('bamSubIntroTitle' + n));
+		return { series: series, start: n0 };
+	}
+
 	return null;
 }
 
-// 여러 문단(빈 줄로 구분)을 한 번에 붙여넣으면 현재 칸부터 다음 칸들로 자동 분배한다.
+// 여러 문단(빈 줄 구분)을 붙여넣으면 현재 칸부터 같은 섹션의 다음 칸들로 자동 분배한다.
 function setupParagraphPasteDistribution() {
 	let ids = [];
-	for (let g = 1; g <= 8; g++)
-		for (let c = 1; c <= 8; c++)
-			ids.push('bamSub' + c + 'Content' + g);
-	for (let n = 1; n <= 8; n++) ids.push('bamSubIntroTitle' + n);
-	for (let s = 1; s <= 8; s++) ids.push('bamSubTitle' + s);
+	ids.push('bamIntroTitle1');
+	for (let n = 1; n <= 16; n++) ids.push('bamSubIntroTitle' + n);
+	for (let g = 1; g <= 8; g++) {
+		ids.push('bamSubTitle' + g);
+		for (let c = 1; c <= 16; c++) ids.push('bamSub' + c + 'Content' + g);
+	}
 
 	ids.forEach(function(id) {
 		let el = document.getElementById(id);
@@ -6242,13 +6105,12 @@ function setupParagraphPasteDistribution() {
 			let text = cb.getData('text');
 			if (!text) return;
 
-			// 빈 줄(하나 이상) 기준으로 문단 분리
 			let paras = text.replace(/\r\n/g, '\n')
 							.split(/\n\s*\n/)
 							.map(function(s) { return s.trim(); })
 							.filter(function(s) { return s.length > 0; });
 
-			if (paras.length <= 1) return; // 문단이 하나면 기본 붙여넣기 그대로
+			if (paras.length <= 1) return;
 
 			let info = bamGetContentSeries(el);
 			if (!info) return;
@@ -6262,7 +6124,6 @@ function setupParagraphPasteDistribution() {
 			for (let k = 0; k < paras.length; k++) {
 				let targetIdx = start + k;
 				if (targetIdx > lastIdx) {
-					// 칸이 모자라면 남는 문단은 마지막 칸에 이어 붙임
 					let lastEl = series[lastIdx];
 					if (lastEl) lastEl.value += (lastEl.value ? '\n\n' : '') + paras[k];
 				} else {
@@ -6271,7 +6132,6 @@ function setupParagraphPasteDistribution() {
 				}
 			}
 
-			// 5~8이 채워졌으면 접힌 그룹 펼치기
 			refreshCollapsibleSubContents();
 		});
 	});
