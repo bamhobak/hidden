@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.6.5";
+var _bamVersion = "1.0.6.6";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6124,8 +6124,9 @@ function setupParagraphPasteDistribution() {
 			let text = cb.getData('text');
 			if (!text) return;
 
+			// 줄바꿈마다 분리 (빈 줄은 무시)
 			let paras = text.replace(/\r\n/g, '\n')
-							.split(/\n\s*\n/)
+							.split(/\n/)
 							.map(function(s) { return s.trim(); })
 							.filter(function(s) { return s.length > 0; });
 
