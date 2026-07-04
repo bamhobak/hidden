@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.5.8";
+var _bamVersion = "1.0.5.9";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6086,6 +6086,7 @@ function extract_hidden_program()
 {
 	ExtractHiddenText();
 	SetCheckboxValue("bamCheckTitleChange", "true");
+	refreshCollapsibleSubContents();
 }
 
 function init_bamhobak()
@@ -6138,6 +6139,75 @@ function bamInit()
 }
 
 
+
+var _bamCollapsibleRefreshers = [];
+
+// 각 소제목 그룹의 내용5~8을 기본 접힘 처리하고 "＋ 더보기" 토글 버튼을 추가한다.
+// (입력창 노출만 제어할 뿐, 삽입/추출 로직은 그대로 8개 슬롯을 사용한다.)
+function setupCollapsibleSubContents() {
+	_bamCollapsibleRefreshers = [];
+
+	for (let g = 1; g <= 8; g++) {
+		let rows = [];
+		for (let c = 5; c <= 8; c++) {
+			let ta = document.getElementById('bamSub' + c + 'Content' + g);
+			if (ta) {
+				let row = ta.closest('.input-row');
+				if (row) rows.push(row);
+			}
+		}
+		if (rows.length === 0) continue;
+
+		let anchorTa = document.getElementById('bamSub4Content' + g);
+		if (!anchorTa) continue;
+		let anchor = anchorTa.closest('.input-row');
+		if (!anchor) continue;
+
+		let btn = document.createElement('button');
+		btn.type = 'button';
+		btn.className = 'bam-more-btn';
+
+		let setState = function(expanded) {
+			for (let i = 0; i < rows.length; i++) {
+				rows[i].style.display = expanded ? '' : 'none';
+			}
+			btn.textContent = expanded ? '－ 내용 5~8 접기' : '＋ 내용 5~8 더보기';
+			btn.setAttribute('data-expanded', expanded ? '1' : '0');
+		};
+
+		btn.addEventListener('click', function() {
+			setState(btn.getAttribute('data-expanded') !== '1');
+		});
+
+		// 초기 상태: 5~8 중 값이 있으면 펼침, 없으면 접힘
+		let hasVal = false;
+		for (let i = 0; i < rows.length; i++) {
+			let t = rows[i].querySelector('textarea');
+			if (t && t.value.trim() !== '') { hasVal = true; break; }
+		}
+		setState(hasVal);
+
+		let btnRow = document.createElement('div');
+		btnRow.className = 'input-row bam-more-row';
+		btnRow.appendChild(btn);
+		anchor.parentNode.insertBefore(btnRow, anchor.nextSibling);
+
+		// 추출 후 값이 채워지면 자동으로 펼치기 위한 refresher 등록
+		_bamCollapsibleRefreshers.push(function() {
+			for (let i = 0; i < rows.length; i++) {
+				let t = rows[i].querySelector('textarea');
+				if (t && t.value.trim() !== '') { setState(true); return; }
+			}
+		});
+	}
+}
+
+// 추출 등으로 값이 채워졌을 때 접힌 그룹을 다시 펼친다.
+function refreshCollapsibleSubContents() {
+	for (let i = 0; i < _bamCollapsibleRefreshers.length; i++) {
+		_bamCollapsibleRefreshers[i]();
+	}
+}
 
 function initPopupLayer(){
 
@@ -6245,6 +6315,13 @@ const style = `
     .bam-input-group { display: flex; flex-direction: column; gap: 1px; width: 100%; }
     .input-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 1px; }
 	.input-row-subtitle { font-weight: bold; }
+	.bam-more-row { margin: 3px 0 8px 0; }
+	.bam-more-btn {
+		background: #f0f0ff; color: #6B66FF;
+		border: 1px dashed #6B66FF; border-radius: 4px;
+		padding: 3px 12px; font-size: 12px; cursor: pointer;
+	}
+	.bam-more-btn:hover { background: #e6e6ff; }
     .input-row label {
         width: 80px; color: #555; flex-shrink: 0;
         margin-top: 6px; /* 라벨을 입력창 높이와 비슷하게 맞춤 */
@@ -6483,6 +6560,9 @@ const html = `
 
 	const extractButton = document.getElementById('extractHidden');
 	extractButton.addEventListener('click', extract_hidden_program);
+
+	// 소제목 내용5~8 접기/펼치기 초기화
+	setupCollapsibleSubContents();
 
 
 	const titleSpan = document.getElementById('bamhobakTitle');
