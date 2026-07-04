@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.6.1";
+var _bamVersion = "1.0.6.2";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6214,6 +6214,12 @@ function bamGetContentSeries(el) {
 		for (let n = 1; n <= 8; n++) series.push(document.getElementById('bamSubIntroTitle' + n));
 		return { series: series, start: parseInt(m[1], 10) - 1 };
 	}
+	m = id.match(/^bamSubTitle([1-8])$/);
+	if (m) {
+		let series = [];
+		for (let s = 1; s <= 8; s++) series.push(document.getElementById('bamSubTitle' + s));
+		return { series: series, start: parseInt(m[1], 10) - 1 };
+	}
 	return null;
 }
 
@@ -6224,6 +6230,7 @@ function setupParagraphPasteDistribution() {
 		for (let c = 1; c <= 8; c++)
 			ids.push('bamSub' + c + 'Content' + g);
 	for (let n = 1; n <= 8; n++) ids.push('bamSubIntroTitle' + n);
+	for (let s = 1; s <= 8; s++) ids.push('bamSubTitle' + s);
 
 	ids.forEach(function(id) {
 		let el = document.getElementById(id);
