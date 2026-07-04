@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.7.1";
+var _bamVersion = "1.0.7.2";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1599,6 +1599,12 @@ function ParseDocumentModel()
         let modelText = rootObj["result"]["documentModel"];
 
 		_bamDocumentModel = JSON.parse(modelText);
+
+		// 과거 버그로 저장된 null/undefined 컴포넌트 제거 (수정 먹통 글 복구 + 안전)
+		if (_bamDocumentModel && _bamDocumentModel["document"] && Array.isArray(_bamDocumentModel["document"]["components"]))
+		{
+			_bamDocumentModel["document"]["components"] = _bamDocumentModel["document"]["components"].filter(function(c){ return c !== null && c !== undefined; });
+		}
     }
     catch(ex)
     {
@@ -2643,6 +2649,7 @@ function AttachJsonNodeTrust2() {
 					for(let j = 0; j < subIntroTitleNodeObjects.length; j++)
 					{
 						let subNodeObject = subIntroTitleNodeObjects[j];
+						if( subNodeObject === undefined ) continue;		// 빈 칸(구멍)은 건너뜀 - null 컴포넌트 방지
 
 						componentsObject.splice(componentsObject.indexOf(extraTargetComponents[index]), 0, subNodeObject);		// 앞에 삽입
 					}
