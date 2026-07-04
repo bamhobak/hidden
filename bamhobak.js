@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.6.9";
+var _bamVersion = "1.0.7.0";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -5993,42 +5993,63 @@ function bamExpandSeries(idFn, fromN, toN, labelFn) {
 }
 
 // idFn(n) (n=1..total) 시리즈를 chunk(4)개 단위로 접고 "＋더보기" 버튼으로 펼친다.
+// --- 4개 단위 접기/펼치기 (DOM 상태 기반) ---
+
+function bamContentRowOf(idFn, n) {
+	let el = document.getElementById(idFn(n));
+	return el ? el.closest('.input-row') : null;
+}
+
+function bamFindMoreBtn(idFn, total) {
+	let last = bamContentRowOf(idFn, total);
+	if (!last) return null;
+	let sib = last.nextElementSibling;
+	if (sib && sib.className && sib.className.indexOf('bam-more-row') > -1) return sib.querySelector('.bam-more-btn');
+	return null;
+}
+
+function bamGetShown(idFn, total) {
+	let s = 0;
+	for (let n = 1; n <= total; n++) {
+		let r = bamContentRowOf(idFn, n);
+		if (r && r.style.display !== 'none') s = n; else break;
+	}
+	return s;
+}
+
+function bamNeededByFilled(idFn, total, chunk) {
+	let need = 0;
+	for (let n = 1; n <= total; n++) {
+		let el = document.getElementById(idFn(n));
+		if (el && el.value && el.value.trim() !== '') need = Math.ceil(n / chunk) * chunk;
+	}
+	return need;
+}
+
+function bamApplyShown(idFn, total, chunk, shown) {
+	for (let n = 1; n <= total; n++) {
+		let r = bamContentRowOf(idFn, n);
+		if (r) r.style.display = (n <= shown) ? '' : 'none';
+	}
+	let btn = bamFindMoreBtn(idFn, total);
+	if (btn) {
+		if (shown >= total) btn.textContent = '－ 접기';
+		else btn.textContent = '＋ 내용 ' + (shown + 1) + '~' + Math.min(shown + chunk, total) + ' 더보기';
+	}
+}
+
 function bamSetupChunkedCollapse(idFn, total, chunk) {
 	let btn = document.createElement('button');
 	btn.type = 'button';
 	btn.className = 'bam-more-btn';
-	let shown = 0;
-
-	let rowOf = function(n) { let el = document.getElementById(idFn(n)); return el ? el.closest('.input-row') : null; };
-
-	let apply = function() {
-		for (let n = 1; n <= total; n++) {
-			let r = rowOf(n);
-			if (r) r.style.display = (n <= shown) ? '' : 'none';
-		}
-		if (shown >= total) btn.textContent = '－ 접기';
-		else btn.textContent = '＋ 내용 ' + (shown + 1) + '~' + Math.min(shown + chunk, total) + ' 더보기';
-	};
-
-	let neededByFilled = function() {
-		let mf = 0;
-		for (let n = 1; n <= total; n++) {
-			let el = document.getElementById(idFn(n));
-			if (el && el.value && el.value.trim() !== '') mf = Math.max(mf, Math.ceil(n / chunk) * chunk);
-		}
-		return mf;
-	};
-
 	btn.addEventListener('click', function() {
+		let shown = bamGetShown(idFn, total);
 		if (shown >= total) shown = 0;
 		else shown = Math.min(shown + chunk, total);
-		apply();
+		bamApplyShown(idFn, total, chunk, shown);
 	});
 
-	shown = neededByFilled();
-	apply();
-
-	let lastRow = rowOf(total);
+	let lastRow = bamContentRowOf(idFn, total);
 	if (lastRow) {
 		let btnRow = document.createElement('div');
 		btnRow.className = 'input-row bam-more-row';
@@ -6036,33 +6057,37 @@ function bamSetupChunkedCollapse(idFn, total, chunk) {
 		lastRow.parentNode.insertBefore(btnRow, lastRow.nextSibling);
 	}
 
-	_bamCollapsibleRefreshers.push(function() {
-		let need = neededByFilled();
-		if (need > shown) { shown = need; apply(); }
-	});
+	// 초기 상태: 채워진 것 있으면 그만큼 펼침, 없으면 전부 접힘
+	bamApplyShown(idFn, total, chunk, bamNeededByFilled(idFn, total, chunk));
+}
+
+// 접기 대상 시리즈 목록 (인사말 + 소제목 8그룹)
+function bamCollapseSeriesList() {
+	let list = [ function(n){ return 'bamSubIntroTitle' + n; } ];
+	for (let g = 1; g <= 8; g++) {
+		list.push((function(g){ return function(c){ return 'bamSub' + c + 'Content' + g; }; })(g));
+	}
+	return list;
 }
 
 // 인사말/각 소제목 내용을 1..16으로 확장하고 4개 단위로 접는다.
 function setupCollapsibleSubContents() {
-	_bamCollapsibleRefreshers = [];
-
-	// 인사말 내용 1..16
-	let introFn = function(n){ return 'bamSubIntroTitle' + n; };
-	bamExpandSeries(introFn, 9, 16, function(n){ return '내용' + n; });
-	bamSetupChunkedCollapse(introFn, 16, 4);
-
-	// 각 소제목 내용 1..16
-	for (let g = 1; g <= 8; g++) {
-		let idFn = (function(g){ return function(c){ return 'bamSub' + c + 'Content' + g; }; })(g);
-		bamExpandSeries(idFn, 9, 16, function(c){ return '내용' + c; });
-		bamSetupChunkedCollapse(idFn, 16, 4);
+	let list = bamCollapseSeriesList();
+	for (let i = 0; i < list.length; i++) {
+		bamExpandSeries(list[i], 9, 16, function(n){ return '내용' + n; });
+		bamSetupChunkedCollapse(list[i], 16, 4);
 	}
 }
 
-// 추출 등으로 값이 채워졌을 때 접힌 칸을 다시 펼친다.
+// 추출 등으로 값이 채워졌을 때, 값이 있는 칸이 보이도록 펼친다. (DOM 직접 스캔)
 function refreshCollapsibleSubContents() {
-	for (let i = 0; i < _bamCollapsibleRefreshers.length; i++) {
-		_bamCollapsibleRefreshers[i]();
+	let list = bamCollapseSeriesList();
+	for (let i = 0; i < list.length; i++) {
+		let idFn = list[i];
+		let need = bamNeededByFilled(idFn, 16, 4);
+		if (need > bamGetShown(idFn, 16)) {
+			bamApplyShown(idFn, 16, 4, need);
+		}
 	}
 }
 
