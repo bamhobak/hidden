@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.6.7";
+var _bamVersion = "1.0.6.8";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6152,7 +6152,7 @@ function setupParagraphPasteDistribution() {
 				}
 			}
 
-			refreshCollapsibleSubContents();
+				// 붙여넣기 후 자동으로 펼치지 않음 (더보기 버튼으로만 펼침)
 		});
 	});
 }
