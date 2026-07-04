@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.5.7";
+var _bamVersion = "1.0.5.8";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6157,7 +6157,6 @@ const style = `
         display: none;
         justify-content: center;
         align-items: center;
-        backdrop-filter: blur(3px);
         font-family: 'Malgun Gothic', 'Noto Sans KR', sans-serif;
     }
 
@@ -6173,6 +6172,7 @@ const style = `
         flex-direction: column;
         overflow: hidden;
         border: 1px solid #6B66FF;
+        contain: layout style paint;
     }
 
     /* 헤더 영역 */
