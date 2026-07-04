@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.6.0";
+var _bamVersion = "1.0.6.1";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6198,6 +6198,78 @@ function refreshCollapsibleSubContents() {
 	}
 }
 
+// 특정 내용 입력창이 속한 "같은 그룹의 내용 입력창 목록"과 그 안에서의 위치를 반환한다.
+function bamGetContentSeries(el) {
+	let id = el.id;
+	let m = id.match(/^bamSub([1-8])Content([1-8])$/);
+	if (m) {
+		let g = m[2];
+		let series = [];
+		for (let c = 1; c <= 8; c++) series.push(document.getElementById('bamSub' + c + 'Content' + g));
+		return { series: series, start: parseInt(m[1], 10) - 1 };
+	}
+	m = id.match(/^bamSubIntroTitle([1-8])$/);
+	if (m) {
+		let series = [];
+		for (let n = 1; n <= 8; n++) series.push(document.getElementById('bamSubIntroTitle' + n));
+		return { series: series, start: parseInt(m[1], 10) - 1 };
+	}
+	return null;
+}
+
+// 여러 문단(빈 줄로 구분)을 한 번에 붙여넣으면 현재 칸부터 다음 칸들로 자동 분배한다.
+function setupParagraphPasteDistribution() {
+	let ids = [];
+	for (let g = 1; g <= 8; g++)
+		for (let c = 1; c <= 8; c++)
+			ids.push('bamSub' + c + 'Content' + g);
+	for (let n = 1; n <= 8; n++) ids.push('bamSubIntroTitle' + n);
+
+	ids.forEach(function(id) {
+		let el = document.getElementById(id);
+		if (!el) return;
+
+		el.addEventListener('paste', function(e) {
+			let cb = e.clipboardData || window.clipboardData;
+			if (!cb) return;
+			let text = cb.getData('text');
+			if (!text) return;
+
+			// 빈 줄(하나 이상) 기준으로 문단 분리
+			let paras = text.replace(/\r\n/g, '\n')
+							.split(/\n\s*\n/)
+							.map(function(s) { return s.trim(); })
+							.filter(function(s) { return s.length > 0; });
+
+			if (paras.length <= 1) return; // 문단이 하나면 기본 붙여넣기 그대로
+
+			let info = bamGetContentSeries(el);
+			if (!info) return;
+
+			e.preventDefault();
+
+			let series = info.series;
+			let start = info.start;
+			let lastIdx = series.length - 1;
+
+			for (let k = 0; k < paras.length; k++) {
+				let targetIdx = start + k;
+				if (targetIdx > lastIdx) {
+					// 칸이 모자라면 남는 문단은 마지막 칸에 이어 붙임
+					let lastEl = series[lastIdx];
+					if (lastEl) lastEl.value += (lastEl.value ? '\n\n' : '') + paras[k];
+				} else {
+					let t = series[targetIdx];
+					if (t) t.value = paras[k];
+				}
+			}
+
+			// 5~8이 채워졌으면 접힌 그룹 펼치기
+			refreshCollapsibleSubContents();
+		});
+	});
+}
+
 function initPopupLayer(){
 
 
@@ -6230,13 +6302,13 @@ const style = `
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        border: 1px solid #6B66FF;
+        border: 1px solid #2E9E5B;
         contain: layout style paint;
     }
 
     /* 헤더 영역 */
     .bam-header {
-        background-color: #6B66FF;
+        background-color: #2E9E5B;
         padding: 15px 20px;
         display: flex;
         justify-content: space-between;
@@ -6263,7 +6335,7 @@ const style = `
 
     /* 액션 버튼 */
     .bam-actions button {
-        background: white; color: #6B66FF; border: none;
+        background: white; color: #2E9E5B; border: none;
         padding: 6px 12px; margin-left: 5px; border-radius: 4px;
         font-weight: bold; cursor: pointer; font-size: 12px; transition: all 0.2s;
     }
@@ -6287,7 +6359,7 @@ const style = `
     /* 왼쪽 굵은 라벨 */
     .bam-label-bold {
         font-weight: bold; margin-right: 15px; min-width: 90px;
-        color: #6B66FF; display: flex; align-items: center; cursor: pointer;
+        color: #2E9E5B; display: flex; align-items: center; cursor: pointer;
         flex-shrink: 0; /* 라벨 줄어들지 않음 */
     }
     .bam-label-bold input { margin-left: 5px; }
@@ -6306,17 +6378,22 @@ const style = `
 	.input-row-subtitle { font-weight: bold; }
 	.bam-more-row { margin: 3px 0 8px 0; }
 	.bam-more-btn {
-		background: #f0f0ff; color: #6B66FF;
-		border: 1px dashed #6B66FF; border-radius: 4px;
+		background: #eafaf1; color: #2E9E5B;
+		border: 1px dashed #2E9E5B; border-radius: 4px;
 		padding: 3px 12px; font-size: 12px; cursor: pointer;
 	}
-	.bam-more-btn:hover { background: #e6e6ff; }
+	.bam-more-btn:hover { background: #d8f3e4; }
     .input-row label {
         width: 80px; color: #555; flex-shrink: 0;
         margin-top: 6px; /* 라벨을 입력창 높이와 비슷하게 맞춤 */
         font-size: 12px;
     }
     
+    /* 체크박스/라디오 색상 그린 통일 */
+    #bamPopupLayer input[type="checkbox"], #bamPopupLayer input[type="radio"] {
+        accent-color: #2E9E5B;
+    }
+
     /* Input & Textarea 스타일 */
     input[type="text"], input[type="number"], textarea {
         width: 100%;
@@ -6328,7 +6405,7 @@ const style = `
         font-family: inherit;
     }
     input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
-        border-color: #6B66FF; outline: none; background: #f9f9ff;
+        border-color: #2E9E5B; outline: none; background: #f2fbf6;
     }
     
     /* Textarea 전용 스타일 보강 */
@@ -6552,6 +6629,9 @@ const html = `
 
 	// 소제목 내용5~8 접기/펼치기 초기화
 	setupCollapsibleSubContents();
+
+	// 여러 문단 붙여넣기 자동 분배
+	setupParagraphPasteDistribution();
 
 
 	const titleSpan = document.getElementById('bamhobakTitle');
