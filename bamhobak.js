@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.5.5";
+var _bamVersion = "1.0.5.6";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -17,7 +17,7 @@ var _bamDocumentModel = {};
 //kmb75dju895!!!
 
 
-var _bamVersionURL = "https://hyukyoun.github.io/bamhobak/hidden.dat";
+var _bamVersionURL = "https://bamhobak.github.io/hidden/hidden.dat";
 var _bamRabbitUpdateURL = "https://blog.naver.com/RabbitUpdate.naver";
 
 var _bamInjectNodeText = '{"id":"[BSE1]","layout":"default","width":100,"rows":[{"cells":[{"id":"[BSE2]","colSpan":1,"rowSpan":1,"width":100,"height":43,"value":[{"id":"[BSE3]","nodes":[{"id":"[BSE4]","value":"[BCONTENT]","@ctype":"textNode"}],"@ctype":"paragraph"}],"@ctype":"tableCell"}],"@ctype":"tableRow"}],"columnCount":1,"borderInlineStyle":"width:1px;height:1px;overflow:hidden;position:absolute;","@ctype":"table"}';
@@ -6094,7 +6094,7 @@ function init_bamhobak()
     const script = document.createElement('script');
     const filePath = 'script.js';
     const timestamp = new Date().getTime();  // 현재 시간을 사용하여 타임스탬프 생성
-    script.src = `http://a.bamhobak.xyz:8081/hidden/bamhobak.js?timestamp=${timestamp}`;
+    script.src = `https://bamhobak.github.io/hidden/bamhobak.js?timestamp=${timestamp}`;
     document.head.appendChild(script);  // 동적으로 script 태그를 HTML에 추가	
 }
 
