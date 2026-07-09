@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.4";
+var _bamVersion = "1.0.9.5";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
