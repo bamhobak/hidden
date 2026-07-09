@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.8.4";
+var _bamVersion = "1.0.8.5";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1645,26 +1645,78 @@ function PostCafeContent() {
     }
 }
 
-function bamInitCafe() {
-    if (window.self !== window.top) return;      // 최상위 프레임만
-    if (document.getElementById("bamhobakExecute")) return;
-    if (!document.body) return;
+var _bamCafeWatcherInstalled = false;
 
+function bamCafeCreateButton() {
     var btn = document.createElement("button");
     btn.innerHTML = "🌰 히든 실행";
     btn.id = "bamhobakExecute";
     btn.type = "button";
-    var base = 'position:fixed;top:120px;right:24px;z-index:2147483000;display:inline-flex;align-items:center;gap:6px;'
-        + 'padding:10px 20px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:14px;'
-        + 'line-height:1;border:none;border-radius:24px;cursor:pointer;box-shadow:0 4px 12px rgba(46,158,91,0.4);'
-        + 'transition:all 0.15s ease;letter-spacing:0.3px;';
-    btn.setAttribute('style', base);
-    btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', base + 'filter:brightness(1.06);transform:translateY(-1px);'); });
-    btn.addEventListener('mouseleave', function(){ btn.setAttribute('style', base); });
     btn.addEventListener("click", open_hidden_program);
+    return btn;
+}
 
+// 수정/삭제 버튼 오른쪽에 인라인 배치 (없으면 false)
+function bamCafePlaceNearEdit(btn) {
+    try {
+        let els = document.querySelectorAll('button, a');
+        let editEl = null, delEl = null;
+        for (let i = 0; i < els.length; i++) {
+            let tx = (els[i].textContent || '').trim();
+            if (tx === '수정' && !editEl) editEl = els[i];
+            else if (tx === '삭제' && !delEl) delEl = els[i];
+        }
+        let anchor = delEl || editEl;
+        if (!anchor || !anchor.parentNode) return false;
+
+        let inlineStyle = 'display:inline-flex;align-items:center;gap:5px;vertical-align:middle;margin-left:8px;'
+            + 'padding:7px 16px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:13px;'
+            + 'line-height:1;border:none;border-radius:18px;cursor:pointer;box-shadow:0 2px 6px rgba(46,158,91,0.35);letter-spacing:0.2px;';
+        btn.setAttribute('style', inlineStyle);
+        btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', inlineStyle + 'filter:brightness(1.06);'); });
+        btn.addEventListener('mouseleave', function(){ btn.setAttribute('style', inlineStyle); });
+        anchor.parentNode.insertBefore(btn, anchor.nextSibling);
+        return true;
+    } catch (e) { return false; }
+}
+
+function bamCafePlaceFloating(btn) {
+    let base = 'position:fixed;top:120px;right:24px;z-index:2147483000;display:inline-flex;align-items:center;gap:6px;'
+        + 'padding:10px 20px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:14px;'
+        + 'line-height:1;border:none;border-radius:24px;cursor:pointer;box-shadow:0 4px 12px rgba(46,158,91,0.4);letter-spacing:0.3px;';
+    btn.setAttribute('style', base);
+    btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', base + 'filter:brightness(1.06);'); });
+    btn.addEventListener('mouseleave', function(){ btn.setAttribute('style', base); });
     document.body.appendChild(btn);
-    initPopupLayer();
+}
+
+// 글보기 화면에서만 버튼 표시, 글쓰기/수정 화면에선 제거
+function bamCafeUpdateButton() {
+    try {
+        if (!document.body) return;
+        let u = location.href;
+        let isWrite = /\/(write|writeArticle|modify)(\b|\/|\?|#|$)/i.test(u);
+        let hasArticle = /\/articles\/\d+/.test(u) || /cafe\.naver\.com\/[^\/?#]+\/\d+(\?|#|$)/.test(u) || /articleid=\d+/i.test(u);
+        let show = hasArticle && !isWrite;
+
+        let btn = document.getElementById("bamhobakExecute");
+        if (!show) { if (btn && btn.parentNode) btn.parentNode.removeChild(btn); return; }
+        if (btn) return;
+
+        btn = bamCafeCreateButton();
+        if (!bamCafePlaceNearEdit(btn)) bamCafePlaceFloating(btn);
+    } catch (e) {}
+}
+
+function bamInitCafe() {
+    if (window.self !== window.top) return;   // 최상위 프레임만
+    if (_bamCafeWatcherInstalled) return;
+    if (!document.body) return;
+
+    _bamCafeWatcherInstalled = true;
+    initPopupLayer();                          // 팝업 1회 생성
+    bamCafeUpdateButton();
+    setInterval(bamCafeUpdateButton, 1000);    // SPA URL 변화 감시
 }
 
 function ParsePostURL()
