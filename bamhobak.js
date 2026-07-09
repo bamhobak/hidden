@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.0";
+var _bamVersion = "1.0.9.1";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1709,23 +1709,35 @@ function bamCafeFindHeaderAnchor() {
     return null;
 }
 
-function bamCafePlaceHeaderInline(btn, anchor) {
+// 댓글/URL복사 액션 행 컨테이너 찾기 (URL복사 앵커에서 위로 올라가 댓글+URL 둘 다 포함하는 요소)
+function bamCafeFindActionRow() {
+    let anchor = bamCafeFindHeaderAnchor();
+    if (!anchor) return null;
+    let el = anchor;
+    for (let k = 0; k < 8 && el; k++) {
+        let t = (el.textContent || '').replace(/\s+/g, '');
+        if (t.indexOf('댓글') >= 0 && t.indexOf('URL') >= 0) return el;
+        el = el.parentElement;
+    }
+    return null;
+}
+
+// 액션 행 "위쪽"에 우측 정렬로 버튼 배치
+function bamCafePlaceAboveRow(btn, row) {
     try {
-        // 클릭 가능한 상위(버튼/링크)로 올라가 그 옆에 배치
-        let target = anchor;
-        let p = anchor.parentElement;
-        for (let k = 0; k < 3 && p; k++) {
-            if (p.tagName === 'BUTTON' || p.tagName === 'A') { target = p; break; }
-            p = p.parentElement;
-        }
-        if (!target.parentNode) return false;
-        let inlineStyle = 'display:inline-flex;align-items:center;gap:5px;vertical-align:middle;margin-left:10px;'
-            + 'padding:6px 14px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:13px;'
-            + 'line-height:1;border:none;border-radius:16px;cursor:pointer;box-shadow:0 2px 6px rgba(46,158,91,0.35);letter-spacing:0.2px;';
+        if (!row || !row.parentNode) return false;
+        let inlineStyle = 'display:inline-flex;align-items:center;gap:5px;'
+            + 'padding:7px 16px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:13px;'
+            + 'line-height:1;border:none;border-radius:18px;cursor:pointer;box-shadow:0 2px 6px rgba(46,158,91,0.35);letter-spacing:0.2px;';
         btn.setAttribute('style', inlineStyle);
         btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', inlineStyle + 'filter:brightness(1.06);'); });
         btn.addEventListener('mouseleave', function(){ btn.setAttribute('style', inlineStyle); });
-        target.parentNode.insertBefore(btn, target.nextSibling);
+
+        let wrap = document.createElement('div');
+        wrap.id = 'bamhobakBtnWrap';
+        wrap.setAttribute('style', 'display:flex;justify-content:flex-end;margin:0 0 8px 0;width:100%;');
+        wrap.appendChild(btn);
+        row.parentNode.insertBefore(wrap, row);   // 행 위에 삽입
         return true;
     } catch (e) { return false; }
 }
@@ -1739,12 +1751,15 @@ function bamCafeUpdateButton() {
         let show = !isWrite && hasArticle;
 
         let btn = document.getElementById("bamhobakExecute");
-        if (!show) { if (btn && btn.parentNode) btn.parentNode.removeChild(btn); return; }
+        if (!show) {
+            if (btn) { let w = document.getElementById("bamhobakBtnWrap"); (w || btn).remove(); }
+            return;
+        }
         if (btn) return;
 
         btn = bamCafeCreateButton();
-        let anchor = bamCafeFindHeaderAnchor();
-        if (!(anchor && bamCafePlaceHeaderInline(btn, anchor))) bamCafePlaceFloating(btn);
+        let row = bamCafeFindActionRow();
+        if (!(row && bamCafePlaceAboveRow(btn, row))) bamCafePlaceFloating(btn);
     } catch (e) { console.log("bamCafeUpdateButton err: " + e); }
 }
 
