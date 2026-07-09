@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.7.3";
+var _bamVersion = "1.0.8.0";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -11,6 +11,14 @@ var _bamRedirectURL = "";
 
 var _bamPopulationParams = {};
 var _bamDocumentModel = {};
+
+// === 카페(cafe.naver.com) 지원용 ===
+var _bamIsCafe = (typeof location !== 'undefined' && location.hostname && location.hostname.indexOf("cafe.naver.com") >= 0);
+var _bamCafeId = "";
+var _bamArticleId = "";
+var _bamMenuId = "1";
+var _bamCafeSubject = "";
+var _bamCafeOptions = {};
 
 //테스트 아이디
 //forgive2581
@@ -1474,8 +1482,152 @@ function makeRefererUrl()
     _bamReferer = "https://blog.naver.com/" + naverid + "/postupdate?logNo=" + logNo;
 }
 
+// === 카페 입출력 (blog과 동일한 문서모델 구조 재사용) ===
+function requestCafeGet(url) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, false);
+    xhr.withCredentials = true;
+    try { xhr.setRequestHeader("x-cafe-product", "pc"); } catch(e){}
+    try { xhr.setRequestHeader("accept", "application/json, text/plain, */*"); } catch(e){}
+    xhr.send();
+    return xhr.responseText;
+}
+
+function requestCafePostJson(url, body) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, false);
+    xhr.withCredentials = true;
+    try { xhr.setRequestHeader("Content-Type", "application/json"); } catch(e){}
+    try { xhr.setRequestHeader("x-cafe-product", "pc"); } catch(e){}
+    try { xhr.setRequestHeader("accept", "application/json, text/plain, */*"); } catch(e){}
+    xhr.send(body);
+    if (xhr.status < 200 || xhr.status >= 300) {
+        console.log("cafe save status " + xhr.status + " : " + xhr.responseText);
+        return null;
+    }
+    return xhr.responseText;
+}
+
+function ParseCafePostURL() {
+    _bamPostUrl = location.href;
+    _bamCafeId = ""; _bamArticleId = ""; _bamMenuId = "1";
+    let u = location.href;
+
+    let m = u.match(/\/cafes\/(\d+)\/articles\/(\d+)/);
+    if (m) { _bamCafeId = m[1]; _bamArticleId = m[2]; }
+    else {
+        let c = u.match(/clubid=(\d+)/i); if (c) _bamCafeId = c[1];
+        let a = u.match(/articleid=(\d+)/i); if (a) _bamArticleId = a[1];
+    }
+    let mid = u.match(/menuid=(\d+)/i); if (mid) _bamMenuId = mid[1];
+
+    if (!_bamCafeId || !_bamArticleId) {
+        alert("카페 글 주소에서 정보를 찾지 못했습니다.\n글 상세 화면(주소에 /cafes/카페번호/articles/글번호 형태)에서 실행하세요.");
+        return false;
+    }
+    return true;
+}
+
+function ParseCafeDocumentModel() {
+    try {
+        let url = "https://apis.cafe.naver.com/editor/v2/cafes/" + _bamCafeId + "/editor?articleId=" + _bamArticleId + "&from=pc";
+        let source = requestCafeGet(url);
+        let root = JSON.parse(source);
+        let r = root["result"];
+
+        let contentJson = r["article"]["contentJson"];
+        _bamDocumentModel = JSON.parse(contentJson);
+
+        _bamCafeSubject = r["article"]["subject"] || "";
+        if (r["selectedMenu"] && r["selectedMenu"]["menu"]) _bamMenuId = r["selectedMenu"]["menu"]["menuId"];
+        _bamCafeOptions = r["options"] || {};
+
+        // 깨진 null/undefined 컴포넌트 제거 (복구 + 안전)
+        if (_bamDocumentModel && _bamDocumentModel["document"] && Array.isArray(_bamDocumentModel["document"]["components"])) {
+            _bamDocumentModel["document"]["components"] = _bamDocumentModel["document"]["components"].filter(function(c){ return c !== null && c !== undefined; });
+        }
+        return true;
+    } catch (ex) {
+        console.log("ParseCafeDocumentModel Exception : " + ex);
+        return false;
+    }
+}
+
+function PostCafeContent() {
+    try {
+        // 키 순서 정렬(블로그와 동일 처리)
+        const priorityKeys = ['id', '@ctype', 'layout'];
+        const reordered = reorderObjectRecursively(_bamDocumentModel, priorityKeys);
+        let contentJson = JSON.stringify(reordered);
+
+        let subject = _bamCafeSubject;
+        if (IsChangeTitle()) { let t = GetReplaceTitle(); if (t && t.length > 0) subject = t; }
+
+        let opt = _bamCafeOptions || {};
+        let article = {
+            "cafeId": Number(_bamCafeId),
+            "contentJson": contentJson,
+            "from": "pc",
+            "headId": 0,
+            "menuId": Number(_bamMenuId),
+            "subject": subject,
+            "tagList": [],
+            "editorVersion": 4,
+            "parentId": 0,
+            "open": (opt.open !== undefined ? opt.open : false),
+            "naverOpen": (opt.naverOpen !== undefined ? opt.naverOpen : true),
+            "externalOpen": (opt.externalOpen !== undefined ? opt.externalOpen : true),
+            "enableComment": (opt.enableComment !== undefined ? opt.enableComment : true),
+            "enableScrap": (opt.enableScrap !== undefined ? opt.enableScrap : true),
+            "enableCopy": (opt.enableCopy !== undefined ? opt.enableCopy : true),
+            "useAutoSource": (opt.useAutoSource !== undefined ? opt.useAutoSource : false),
+            "cclTypes": (opt.cclTypes || []),
+            "useCcl": false
+        };
+
+        let body = JSON.stringify({ "article": article });
+        let url = "https://apis.cafe.naver.com/editor/v2.0/cafes/" + _bamCafeId + "/articles/" + _bamArticleId;
+        let source = requestCafePostJson(url, body);
+        if (source === null) return false;
+
+        // 명시적 오류 표기가 있으면 실패 처리
+        try {
+            let rr = JSON.parse(source);
+            if (rr && (rr["error"] || rr["errorCode"] || rr["isSuccess"] === false)) return false;
+        } catch (e) {}
+        return true;
+    } catch (ex) {
+        console.log("PostCafeContent Exception : " + ex);
+        return false;
+    }
+}
+
+function bamInitCafe() {
+    if (window.self !== window.top) return;      // 최상위 프레임만
+    if (document.getElementById("bamhobakExecute")) return;
+    if (!document.body) return;
+
+    var btn = document.createElement("button");
+    btn.innerHTML = "🌰 히든 실행";
+    btn.id = "bamhobakExecute";
+    btn.type = "button";
+    var base = 'position:fixed;top:120px;right:24px;z-index:2147483000;display:inline-flex;align-items:center;gap:6px;'
+        + 'padding:10px 20px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:14px;'
+        + 'line-height:1;border:none;border-radius:24px;cursor:pointer;box-shadow:0 4px 12px rgba(46,158,91,0.4);'
+        + 'transition:all 0.15s ease;letter-spacing:0.3px;';
+    btn.setAttribute('style', base);
+    btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', base + 'filter:brightness(1.06);transform:translateY(-1px);'); });
+    btn.addEventListener('mouseleave', function(){ btn.setAttribute('style', base); });
+    btn.addEventListener("click", open_hidden_program);
+
+    document.body.appendChild(btn);
+    initPopupLayer();
+}
+
 function ParsePostURL()
 {
+    if (_bamIsCafe) return ParseCafePostURL();
+
     // -- 초기화
     _bamPostUrl = "";
     _bamNaverId = "";
@@ -1531,11 +1683,14 @@ function ParsePostURL()
 
 function LoginAction()
 {
+    if (_bamIsCafe) return true;
     return isLoginBlog();
 }
 
 function ParsePopulationParams()
 {
+    if (_bamIsCafe) return true;
+
     let naverid = _bamNaverId;
     let logNo = _bamLogNo;
     let referer = _bamReferer;
@@ -1581,6 +1736,8 @@ function ParsePopulationParams()
 
 function ParseDocumentModel()
 {
+    if (_bamIsCafe) return ParseCafeDocumentModel();
+
     let naverid = _bamNaverId;
     let logNo = _bamLogNo;
     let referer = _bamReferer;
@@ -5463,6 +5620,8 @@ function ChangeDocumentModelImageSlide2() {
 }
 
 function HideDocumentModelImageSlide() {
+    if (_bamIsCafe) return true;   // 카페는 슬라이드 이미지 숨김 미적용(안전)
+
     let srcText = this.DocumentModel;
 
     try {
@@ -5619,6 +5778,8 @@ function reorderObjectRecursively(node, priorityKeys) {
 
 function PostContent()
 {
+    if (_bamIsCafe) return PostCafeContent();
+
     let naverid = _bamNaverId;
     let logNo = _bamLogNo;
     let referer = _bamReferer;
@@ -5916,6 +6077,8 @@ function init_bamhobak()
 
 function get_main_frame_document()
 {
+    if (_bamIsCafe) return document;
+
     let mainFrame = document.getElementById("mainFrame");
     let ttt = mainFrame.contentWindow.document.querySelector('#postListBody');
 
@@ -5927,6 +6090,8 @@ function get_main_frame_document()
 function bamInit()
 {
     console.log("start content script");
+
+    if (_bamIsCafe) { bamInitCafe(); return; }
 
 //	if( !CheckVersion() )
 //	{		
