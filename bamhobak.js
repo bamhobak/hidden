@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.8.0";
+var _bamVersion = "1.0.8.1";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1508,21 +1508,64 @@ function requestCafePostJson(url, body) {
     return xhr.responseText;
 }
 
+// art= 파라미터(JWT)에서 cafeId/articleId 추출
+function bamDecodeArtParam() {
+    try {
+        let m = location.href.match(/[?&]art=([^&]+)/);
+        if (!m) return null;
+        let art = decodeURIComponent(m[1]);
+        let parts = art.split('.');
+        for (let i = 0; i < parts.length; i++) {
+            try {
+                let s = parts[i].replace(/-/g, '+').replace(/_/g, '/');
+                while (s.length % 4) s += '=';
+                let obj = JSON.parse(atob(s));
+                if (obj && obj.cafeId && obj.articleId) return { cafeId: String(obj.cafeId), articleId: String(obj.articleId) };
+            } catch (e) {}
+        }
+    } catch (e) {}
+    return null;
+}
+
 function ParseCafePostURL() {
     _bamPostUrl = location.href;
     _bamCafeId = ""; _bamArticleId = ""; _bamMenuId = "1";
     let u = location.href;
 
+    // 1) 숫자형: /cafes/{cafeId}/articles/{articleId} (ca-fe/f-e)
     let m = u.match(/\/cafes\/(\d+)\/articles\/(\d+)/);
     if (m) { _bamCafeId = m[1]; _bamArticleId = m[2]; }
-    else {
-        let c = u.match(/clubid=(\d+)/i); if (c) _bamCafeId = c[1];
-        let a = u.match(/articleid=(\d+)/i); if (a) _bamArticleId = a[1];
+
+    // 2) ArticleRead.nhn?clubid=&articleid=
+    if (!_bamCafeId || !_bamArticleId) {
+        let c = u.match(/clubid=(\d+)/i); let a = u.match(/articleid=(\d+)/i);
+        if (c) _bamCafeId = _bamCafeId || c[1];
+        if (a) _bamArticleId = _bamArticleId || a[1];
     }
+
+    // 3) 공유링크 art= JWT (짧은주소 cafe.naver.com/{slug}/{articleId}?art=...)
+    if (!_bamCafeId || !_bamArticleId) {
+        let art = bamDecodeArtParam();
+        if (art) { _bamCafeId = _bamCafeId || art.cafeId; _bamArticleId = _bamArticleId || art.articleId; }
+    }
+
+    // 4) 짧은주소 글번호 + 페이지 HTML에서 cafeId 최후 추출
+    if (!_bamArticleId) {
+        let am = u.match(/cafe\.naver\.com\/[^\/?#]+\/(\d+)/);
+        if (am) _bamArticleId = am[1];
+    }
+    if (!_bamCafeId) {
+        try {
+            let h = document.documentElement.innerHTML;
+            let cm = h.match(/["']?cafeId["']?\s*[:=]\s*"?(\d{4,})/);
+            if (cm) _bamCafeId = cm[1];
+        } catch (e) {}
+    }
+
     let mid = u.match(/menuid=(\d+)/i); if (mid) _bamMenuId = mid[1];
 
     if (!_bamCafeId || !_bamArticleId) {
-        alert("카페 글 주소에서 정보를 찾지 못했습니다.\n글 상세 화면(주소에 /cafes/카페번호/articles/글번호 형태)에서 실행하세요.");
+        alert("카페 글 정보를 찾지 못했습니다.\n글 상세 화면에서 실행하세요.");
         return false;
     }
     return true;
