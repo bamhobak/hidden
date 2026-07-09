@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.2";
+var _bamVersion = "1.0.9.3";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1691,18 +1691,17 @@ function bamCafePlaceFloating(btn) {
 }
 
 // 글보기 화면에서만 버튼 표시, 글쓰기/수정 화면에선 제거
-// 헤더 액션영역(댓글/URL복사/⋮)에서 'URL 복사' 등 보이는 앵커 찾기
+// 헤더 액션영역에서 'URL 복사' 보이는 앵커 찾기 (아이콘+텍스트 구조도 허용)
 function bamCafeFindHeaderAnchor() {
     try {
-        let els = document.querySelectorAll('*');
+        let els = document.querySelectorAll('button, a, span, div, li');
         for (let i = 0; i < els.length; i++) {
             let e = els[i];
-            if (e.children.length > 1) continue;             // 말단 요소만
             let t = (e.textContent || '').replace(/\s+/g, '');
-            if (t === 'URL복사' || t === '공유하기' || t === '공유') {
+            if (t === 'URL복사' || t === '공유하기') {
                 if (e.offsetParent === null) continue;
                 let r = e.getBoundingClientRect();
-                if (r.width > 0 && r.height > 0) return e;
+                if (r.width > 0 && r.height > 0 && r.width < 240) return e;   // 큰 컨테이너 제외
             }
         }
     } catch (e) {}
