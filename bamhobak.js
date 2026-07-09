@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.5";
+var _bamVersion = "1.0.9.6";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1693,21 +1693,37 @@ function bamCafeFindActionRowFrom(anchor) {
     return anchor.parentElement;
 }
 
-// 행 위쪽에 우측정렬로 버튼 배치 (doc 컨텍스트)
+// 액션 행에서 '댓글' 항목 왼쪽에 인라인 배치
 function bamCafePlaceAboveRowIn(btn, row, doc) {
     try {
-        if (!row || !row.parentNode) return false;
-        let inlineStyle = 'display:inline-flex;align-items:center;gap:5px;'
-            + 'padding:7px 16px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:13px;'
-            + 'line-height:1;border:none;border-radius:18px;cursor:pointer;box-shadow:0 2px 6px rgba(46,158,91,0.35);letter-spacing:0.2px;';
+        if (!row) return false;
+
+        // row의 직계 자식 중 '댓글' 포함하는 것
+        let target = null;
+        let kids = row.children;
+        for (let i = 0; i < kids.length; i++) {
+            let t = (kids[i].textContent || '').replace(/\s+/g, '');
+            if (t.indexOf('댓글') >= 0) { target = kids[i]; break; }
+        }
+        // 없으면 하위에서 댓글 말단 요소 탐색
+        if (!target) {
+            let all = row.querySelectorAll('*');
+            for (let i = 0; i < all.length; i++) {
+                let e = all[i];
+                if (e.children.length > 2) continue;
+                let t = (e.textContent || '').replace(/\s+/g, '');
+                if (t.indexOf('댓글') >= 0) { target = e; break; }
+            }
+        }
+        if (!target || !target.parentNode) return false;
+
+        let inlineStyle = 'display:inline-flex;align-items:center;gap:5px;vertical-align:middle;margin-right:12px;'
+            + 'padding:6px 14px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:13px;'
+            + 'line-height:1;border:none;border-radius:16px;cursor:pointer;box-shadow:0 2px 6px rgba(46,158,91,0.35);letter-spacing:0.2px;';
         btn.setAttribute('style', inlineStyle);
         btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', inlineStyle + 'filter:brightness(1.06);'); });
         btn.addEventListener('mouseleave', function(){ btn.setAttribute('style', inlineStyle); });
-        let wrap = doc.createElement('div');
-        wrap.id = 'bamhobakBtnWrap';
-        wrap.setAttribute('style', 'display:flex;justify-content:flex-end;margin:0 0 8px 0;width:100%;');
-        wrap.appendChild(btn);
-        row.parentNode.insertBefore(wrap, row);
+        target.parentNode.insertBefore(btn, target);   // 댓글 왼쪽
         return true;
     } catch (e) { return false; }
 }
