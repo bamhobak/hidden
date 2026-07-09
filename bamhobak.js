@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.8.9";
+var _bamVersion = "1.0.9.0";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1691,33 +1691,60 @@ function bamCafePlaceFloating(btn) {
 }
 
 // 글보기 화면에서만 버튼 표시, 글쓰기/수정 화면에선 제거
+// 헤더 액션영역(댓글/URL복사/⋮)에서 'URL 복사' 등 보이는 앵커 찾기
+function bamCafeFindHeaderAnchor() {
+    try {
+        let els = document.querySelectorAll('*');
+        for (let i = 0; i < els.length; i++) {
+            let e = els[i];
+            if (e.children.length > 1) continue;             // 말단 요소만
+            let t = (e.textContent || '').replace(/\s+/g, '');
+            if (t === 'URL복사' || t === '공유하기' || t === '공유') {
+                if (e.offsetParent === null) continue;
+                let r = e.getBoundingClientRect();
+                if (r.width > 0 && r.height > 0) return e;
+            }
+        }
+    } catch (e) {}
+    return null;
+}
+
+function bamCafePlaceHeaderInline(btn, anchor) {
+    try {
+        // 클릭 가능한 상위(버튼/링크)로 올라가 그 옆에 배치
+        let target = anchor;
+        let p = anchor.parentElement;
+        for (let k = 0; k < 3 && p; k++) {
+            if (p.tagName === 'BUTTON' || p.tagName === 'A') { target = p; break; }
+            p = p.parentElement;
+        }
+        if (!target.parentNode) return false;
+        let inlineStyle = 'display:inline-flex;align-items:center;gap:5px;vertical-align:middle;margin-left:10px;'
+            + 'padding:6px 14px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:13px;'
+            + 'line-height:1;border:none;border-radius:16px;cursor:pointer;box-shadow:0 2px 6px rgba(46,158,91,0.35);letter-spacing:0.2px;';
+        btn.setAttribute('style', inlineStyle);
+        btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', inlineStyle + 'filter:brightness(1.06);'); });
+        btn.addEventListener('mouseleave', function(){ btn.setAttribute('style', inlineStyle); });
+        target.parentNode.insertBefore(btn, target.nextSibling);
+        return true;
+    } catch (e) { return false; }
+}
+
 function bamCafeUpdateButton() {
     try {
         if (!document.body) return;
         let u = location.href;
         let isWrite = /(write|writeArticle|modify|articlewrite)/i.test(u);
-
-        // 화면에 보이는 수정/삭제만 앵커로 선택 (숨김 메뉴 안의 것 제외)
-        let editEl = null, delEl = null;
-        let els = document.querySelectorAll('button, a');
-        for (let i = 0; i < els.length; i++) {
-            let el = els[i];
-            if (el.offsetParent === null) continue;          // 숨겨진 요소 제외
-            let tx = (el.textContent || '').trim();
-            if (tx === '수정' && !editEl) editEl = el;
-            else if (tx === '삭제' && !delEl) delEl = el;
-        }
         let hasArticle = /\/articles\/\d+/.test(u) || /cafe\.naver\.com\/[^\/?#]+\/\d+(\?|#|$)/.test(u) || /articleid=\d+/i.test(u);
-
-        // 글쓰기/수정 화면이 아니고, 글주소이거나 수정·삭제 버튼이 있으면 표시
-        let show = !isWrite && (hasArticle || !!editEl || !!delEl);
+        let show = !isWrite && hasArticle;
 
         let btn = document.getElementById("bamhobakExecute");
         if (!show) { if (btn && btn.parentNode) btn.parentNode.removeChild(btn); return; }
         if (btn) return;
 
         btn = bamCafeCreateButton();
-        bamCafePlaceFloating(btn);   // 카페 DOM 상 near-edit 배치가 안 보이는 경우가 있어 floating 고정
+        let anchor = bamCafeFindHeaderAnchor();
+        if (!(anchor && bamCafePlaceHeaderInline(btn, anchor))) bamCafePlaceFloating(btn);
     } catch (e) { console.log("bamCafeUpdateButton err: " + e); }
 }
 
