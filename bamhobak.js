@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.8.6";
+var _bamVersion = "1.0.8.7";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1697,13 +1697,15 @@ function bamCafeUpdateButton() {
         let u = location.href;
         let isWrite = /(write|writeArticle|modify|articlewrite)/i.test(u);
 
-        // 수정/삭제 버튼 탐색(내 글 보기 신호 + 배치 앵커)
+        // 화면에 보이는 수정/삭제만 앵커로 선택 (숨김 메뉴 안의 것 제외)
         let editEl = null, delEl = null;
         let els = document.querySelectorAll('button, a');
         for (let i = 0; i < els.length; i++) {
-            let tx = (els[i].textContent || '').trim();
-            if (tx === '수정' && !editEl) editEl = els[i];
-            else if (tx === '삭제' && !delEl) delEl = els[i];
+            let el = els[i];
+            if (el.offsetParent === null) continue;          // 숨겨진 요소 제외
+            let tx = (el.textContent || '').trim();
+            if (tx === '수정' && !editEl) editEl = el;
+            else if (tx === '삭제' && !delEl) delEl = el;
         }
         let hasArticle = /\/articles\/\d+/.test(u) || /cafe\.naver\.com\/[^\/?#]+\/\d+(\?|#|$)/.test(u) || /articleid=\d+/i.test(u);
 
@@ -1715,7 +1717,9 @@ function bamCafeUpdateButton() {
         if (btn) return;
 
         btn = bamCafeCreateButton();
-        if (!bamCafePlaceNearEditWith(btn, editEl, delEl)) bamCafePlaceFloating(btn);
+        let placed = bamCafePlaceNearEditWith(btn, editEl, delEl);
+        if (!placed) bamCafePlaceFloating(btn);
+        console.log("cafe button placed: " + (placed ? "near-edit" : "floating") + " (edit=" + !!editEl + ", del=" + !!delEl + ")");
     } catch (e) { console.log("bamCafeUpdateButton err: " + e); }
 }
 
