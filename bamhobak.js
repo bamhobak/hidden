@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.8.5";
+var _bamVersion = "1.0.8.6";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1695,17 +1695,43 @@ function bamCafeUpdateButton() {
     try {
         if (!document.body) return;
         let u = location.href;
-        let isWrite = /\/(write|writeArticle|modify)(\b|\/|\?|#|$)/i.test(u);
+        let isWrite = /(write|writeArticle|modify|articlewrite)/i.test(u);
+
+        // 수정/삭제 버튼 탐색(내 글 보기 신호 + 배치 앵커)
+        let editEl = null, delEl = null;
+        let els = document.querySelectorAll('button, a');
+        for (let i = 0; i < els.length; i++) {
+            let tx = (els[i].textContent || '').trim();
+            if (tx === '수정' && !editEl) editEl = els[i];
+            else if (tx === '삭제' && !delEl) delEl = els[i];
+        }
         let hasArticle = /\/articles\/\d+/.test(u) || /cafe\.naver\.com\/[^\/?#]+\/\d+(\?|#|$)/.test(u) || /articleid=\d+/i.test(u);
-        let show = hasArticle && !isWrite;
+
+        // 글쓰기/수정 화면이 아니고, 글주소이거나 수정·삭제 버튼이 있으면 표시
+        let show = !isWrite && (hasArticle || !!editEl || !!delEl);
 
         let btn = document.getElementById("bamhobakExecute");
         if (!show) { if (btn && btn.parentNode) btn.parentNode.removeChild(btn); return; }
         if (btn) return;
 
         btn = bamCafeCreateButton();
-        if (!bamCafePlaceNearEdit(btn)) bamCafePlaceFloating(btn);
-    } catch (e) {}
+        if (!bamCafePlaceNearEditWith(btn, editEl, delEl)) bamCafePlaceFloating(btn);
+    } catch (e) { console.log("bamCafeUpdateButton err: " + e); }
+}
+
+function bamCafePlaceNearEditWith(btn, editEl, delEl) {
+    try {
+        let anchor = delEl || editEl;
+        if (!anchor || !anchor.parentNode) return false;
+        let inlineStyle = 'display:inline-flex;align-items:center;gap:5px;vertical-align:middle;margin-left:8px;'
+            + 'padding:7px 16px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:13px;'
+            + 'line-height:1;border:none;border-radius:18px;cursor:pointer;box-shadow:0 2px 6px rgba(46,158,91,0.35);letter-spacing:0.2px;';
+        btn.setAttribute('style', inlineStyle);
+        btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', inlineStyle + 'filter:brightness(1.06);'); });
+        btn.addEventListener('mouseleave', function(){ btn.setAttribute('style', inlineStyle); });
+        anchor.parentNode.insertBefore(btn, anchor.nextSibling);
+        return true;
+    } catch (e) { return false; }
 }
 
 function bamInitCafe() {
@@ -1714,7 +1740,7 @@ function bamInitCafe() {
     if (!document.body) return;
 
     _bamCafeWatcherInstalled = true;
-    initPopupLayer();                          // 팝업 1회 생성
+    try { initPopupLayer(); } catch (e) { console.log("cafe initPopupLayer err: " + e); }   // 팝업 1회 생성
     bamCafeUpdateButton();
     setInterval(bamCafeUpdateButton, 1000);    // SPA URL 변화 감시
 }
