@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.8.2";
+var _bamVersion = "1.0.8.3";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -2134,8 +2134,73 @@ function RemoveHiddenTextDocumentModel()
     return true;
 }
 
+// 카페: 문서모델(components)에서 id -> 텍스트 맵 생성
+function bamCafeBuildIdTextMap(components) {
+	let map = {};
+	function rec(o, ids, box) {
+		if (!o || typeof o !== 'object') return;
+		if (o.id) ids.push(o.id);
+		if (o["@ctype"] === "textNode" && typeof o.value === "string") box.text += o.value;
+		for (let k in o) {
+			let v = o[k];
+			if (Array.isArray(v)) { for (let e of v) rec(e, ids, box); }
+			else if (v && typeof v === 'object') rec(v, ids, box);
+		}
+	}
+	if (Array.isArray(components)) {
+		for (let comp of components) {
+			if (!comp) continue;
+			let ids = []; let box = { text: "" };
+			rec(comp, ids, box);
+			for (let id of ids) map[id] = box.text;
+		}
+	}
+	return map;
+}
+
+// 카페 추출: 발행글 HTML 대신 문서모델(load API)에서 히든 텍스트 추출
+function ExtractCafeHiddenText() {
+	try {
+		if (!ParseCafePostURL()) return;
+		if (!ParseCafeDocumentModel()) { alert("카페 글 불러오기 실패"); return; }
+
+		let components = _bamDocumentModel["document"]["components"];
+		let idMap = bamCafeBuildIdTextMap(components);
+
+		SetTextValue("bamTitle", _bamCafeSubject || "");
+
+		// 히든모드 본문(_bamSEList)
+		let replaceContent = "";
+		for (let i = 0; i < _bamSEList.length; i++) {
+			let se = _bamSEList[i];
+			let t = idMap[se[3]];
+			if (t === undefined) t = idMap[se[1]];
+			if (t !== undefined && t !== '​' && t.length > 0) {
+				if (replaceContent.length > 0) replaceContent += " ";
+				replaceContent += t.trim();
+			}
+		}
+		SetTextValue("bamContents", replaceContent);
+
+		// 신뢰도 필드(_bamSETitleTextList 인덱스 매핑) — blog과 동일 규칙
+		for (let i = 0; i < _bamSETitleTextList.length; i++) {
+			let se = _bamSETitleTextList[i];
+			let t = idMap[se[1]];
+			if (t === undefined || t === '​') continue;
+			if (i === 0) SetTextValue("bamIntroTitle1", t);
+			else if (i <= 16) SetTextValue("bamSubIntroTitle" + i, t);
+			else if (i <= 24) SetTextValue("bamSubTitle" + (i - 16), t);
+			else if (i <= 152) { let c = Math.floor((i - 25) / 8) + 1; let g = ((i - 25) % 8) + 1; SetTextValue("bamSub" + c + "Content" + g, t); }
+		}
+	} catch (ex) {
+		console.log("ExtractCafeHiddenText Exception : " + ex);
+	}
+}
+
 function ExtractHiddenText()
 {
+	if (_bamIsCafe) return ExtractCafeHiddenText();
+
 	ParsePostURL();
 
     let naverid = _bamNaverId;
@@ -5663,8 +5728,6 @@ function ChangeDocumentModelImageSlide2() {
 }
 
 function HideDocumentModelImageSlide() {
-    if (_bamIsCafe) return true;   // 카페는 슬라이드 이미지 숨김 미적용(안전)
-
     let srcText = this.DocumentModel;
 
     try {
