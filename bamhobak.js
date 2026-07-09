@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.8.7";
+var _bamVersion = "1.0.8.8";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -1681,11 +1681,11 @@ function bamCafePlaceNearEdit(btn) {
 }
 
 function bamCafePlaceFloating(btn) {
-    let base = 'position:fixed;top:120px;right:24px;z-index:2147483000;display:inline-flex;align-items:center;gap:6px;'
-        + 'padding:10px 20px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:14px;'
-        + 'line-height:1;border:none;border-radius:24px;cursor:pointer;box-shadow:0 4px 12px rgba(46,158,91,0.4);letter-spacing:0.3px;';
+    let base = 'position:fixed;bottom:28px;right:28px;z-index:2147483000;display:inline-flex;align-items:center;gap:6px;'
+        + 'padding:13px 24px;background:linear-gradient(135deg,#2E9E5B,#27ae60);color:#fff;font-weight:bold;font-size:15px;'
+        + 'line-height:1;border:none;border-radius:26px;cursor:pointer;box-shadow:0 6px 18px rgba(46,158,91,0.5);letter-spacing:0.3px;';
     btn.setAttribute('style', base);
-    btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', base + 'filter:brightness(1.06);'); });
+    btn.addEventListener('mouseenter', function(){ btn.setAttribute('style', base + 'filter:brightness(1.06);transform:translateY(-2px);'); });
     btn.addEventListener('mouseleave', function(){ btn.setAttribute('style', base); });
     document.body.appendChild(btn);
 }
@@ -1717,9 +1717,7 @@ function bamCafeUpdateButton() {
         if (btn) return;
 
         btn = bamCafeCreateButton();
-        let placed = bamCafePlaceNearEditWith(btn, editEl, delEl);
-        if (!placed) bamCafePlaceFloating(btn);
-        console.log("cafe button placed: " + (placed ? "near-edit" : "floating") + " (edit=" + !!editEl + ", del=" + !!delEl + ")");
+        bamCafePlaceFloating(btn);   // 카페 DOM 상 near-edit 배치가 안 보이는 경우가 있어 floating 고정
     } catch (e) { console.log("bamCafeUpdateButton err: " + e); }
 }
 
