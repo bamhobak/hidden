@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.6";
+var _bamVersion = "1.0.9.7";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6090,6 +6090,56 @@ function DoTest() {
 }
 
 
+// 고유 SE id 생성
+function bamUuid() {
+	try {
+		if (window.crypto && crypto.randomUUID) return "SE-" + crypto.randomUUID();
+	} catch (e) {}
+	return "SE-" + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c){ var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
+}
+
+// 표 데이터 붙여넣기 → SE 표 컴포넌트로 글 맨 아래에 삽입 (보이는 표)
+function AttachBamTable() {
+	try {
+		let el = document.getElementById("bamTableData");
+		if (!el) return true;
+		let raw = el.value;
+		if (!raw || raw.trim() === "") return true;
+
+		// 행/열 파싱 (줄바꿈=행, 탭=열)
+		let lines = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+		while (lines.length && lines[lines.length - 1].trim() === "") lines.pop();
+		if (lines.length === 0) return true;
+
+		let rows = lines.map(function(ln){ return ln.split('\t'); });
+		let colCount = 1;
+		rows.forEach(function(r){ if (r.length > colCount) colCount = r.length; });
+
+		let cellWidth = Math.floor(100 / colCount);
+
+		let seRows = rows.map(function(cells){
+			let cellObjs = [];
+			for (let c = 0; c < colCount; c++) {
+				let text = (cells[c] !== undefined ? cells[c] : "");
+				text = removeControlCharacters(text);
+				cellObjs.push({
+					"id": bamUuid(), "colSpan": 1, "rowSpan": 1, "width": cellWidth, "height": 43,
+					"value": [{ "id": bamUuid(), "nodes": [{ "id": bamUuid(), "value": text, "@ctype": "textNode" }], "@ctype": "paragraph" }],
+					"@ctype": "tableCell"
+				});
+			}
+			return { "cells": cellObjs, "@ctype": "tableRow" };
+		});
+
+		let tableComp = { "id": bamUuid(), "layout": "default", "width": 100, "rows": seRows, "columnCount": colCount, "@ctype": "table" };
+		_bamDocumentModel["document"]["components"].push(tableComp);
+		return true;
+	} catch (ex) {
+		console.log("AttachBamTable Exception : " + ex);
+		return false;
+	}
+}
+
 function executeHidden()
 {
 
@@ -6242,6 +6292,13 @@ function executeHidden()
 	}
 
 //	DoTest();
+
+	// --- 표 삽입 (있으면 글 맨 아래에)
+	if (!AttachBamTable())
+	{
+		alert("표 삽입 실패");
+		return;
+	}
 
     // --- 포스팅
     console.log("PostContent");
@@ -6892,6 +6949,11 @@ const html = `
 							<div class="input-row"><label>내용7</label><textarea id="bamSub7Content8" rows="1"></textarea></div>
 							<div class="input-row"><label>내용8</label><textarea id="bamSub8Content8" rows="1"></textarea></div>
 
+
+                            <hr style="border:0; border-top:1px dashed #ddd; width:100%; margin: 10px 0;">
+
+                            <div class="input-row input-row-subtitle"><label>표 삽입</label></div>
+                            <div class="input-row"><label>표 데이터</label><textarea id="bamTableData" rows="5" placeholder="엑셀/시트에서 복사해 붙여넣으세요. (탭=열, 줄바꿈=행 → 자동 인식) · 실제 표는 글 맨 아래에 생성됩니다"></textarea></div>
 
                             <hr style="border:0; border-top:1px dashed #ddd; width:100%; margin: 10px 0;">
                         </div>
