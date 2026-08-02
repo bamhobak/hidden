@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.7";
+var _bamVersion = "1.0.9.8";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6090,6 +6090,9 @@ function DoTest() {
 }
 
 
+// 삽입 표 식별용 고정 id (재실행 시 기존 표 제거용)
+var _BAM_TABLE_ID = "SE-ba111ab1-e000-4000-8000-000000000001";
+
 // 고유 SE id 생성
 function bamUuid() {
 	try {
@@ -6111,6 +6114,12 @@ function AttachBamTable() {
 		while (lines.length && lines[lines.length - 1].trim() === "") lines.pop();
 		if (lines.length === 0) return true;
 
+		// 기존에 삽입했던 표(고정 id) 제거 후 새로 넣기 (중복 방지)
+		let comps = _bamDocumentModel["document"]["components"];
+		for (let i = comps.length - 1; i >= 0; i--) {
+			if (comps[i] && comps[i]["id"] === _BAM_TABLE_ID) comps.splice(i, 1);
+		}
+
 		let rows = lines.map(function(ln){ return ln.split('\t'); });
 		let colCount = 1;
 		rows.forEach(function(r){ if (r.length > colCount) colCount = r.length; });
@@ -6131,8 +6140,8 @@ function AttachBamTable() {
 			return { "cells": cellObjs, "@ctype": "tableRow" };
 		});
 
-		let tableComp = { "id": bamUuid(), "layout": "default", "width": 100, "rows": seRows, "columnCount": colCount, "@ctype": "table" };
-		_bamDocumentModel["document"]["components"].push(tableComp);
+		let tableComp = { "id": _BAM_TABLE_ID, "layout": "default", "width": 100, "rows": seRows, "columnCount": colCount, "@ctype": "table" };
+		comps.push(tableComp);
 		return true;
 	} catch (ex) {
 		console.log("AttachBamTable Exception : " + ex);
