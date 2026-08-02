@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.8";
+var _bamVersion = "1.0.9.9";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6109,10 +6109,32 @@ function AttachBamTable() {
 		let raw = el.value;
 		if (!raw || raw.trim() === "") return true;
 
-		// 행/열 파싱 (줄바꿈=행, 탭=열)
+		// 행/열 파싱 (줄바꿈=행) — 마크다운 표(|) / 탭(엑셀) 모두 지원
 		let lines = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
 		while (lines.length && lines[lines.length - 1].trim() === "") lines.pop();
 		if (lines.length === 0) return true;
+
+		let isMarkdown = lines.some(function(ln){ return ln.indexOf('|') >= 0; });
+
+		let rows = [];
+		for (let li = 0; li < lines.length; li++) {
+			let s = lines[li].trim();
+			if (s === "") continue;
+
+			let cells;
+			if (isMarkdown && s.indexOf('|') >= 0) {
+				if (s.charAt(0) === '|') s = s.slice(1);
+				if (s.charAt(s.length - 1) === '|') s = s.slice(0, -1);
+				cells = s.split('|').map(function(c){ return c.trim(); });
+				// 구분선 행( |---|---| ) 제외
+				let isSep = cells.length > 0 && cells.every(function(c){ return c === '' || /^:?-{2,}:?$/.test(c); });
+				if (isSep) continue;
+			} else {
+				cells = lines[li].split('\t');
+			}
+			rows.push(cells);
+		}
+		if (rows.length === 0) return true;
 
 		// 기존에 삽입했던 표(고정 id) 제거 후 새로 넣기 (중복 방지)
 		let comps = _bamDocumentModel["document"]["components"];
@@ -6120,7 +6142,6 @@ function AttachBamTable() {
 			if (comps[i] && comps[i]["id"] === _BAM_TABLE_ID) comps.splice(i, 1);
 		}
 
-		let rows = lines.map(function(ln){ return ln.split('\t'); });
 		let colCount = 1;
 		rows.forEach(function(r){ if (r.length > colCount) colCount = r.length; });
 
@@ -6962,7 +6983,7 @@ const html = `
                             <hr style="border:0; border-top:1px dashed #ddd; width:100%; margin: 10px 0;">
 
                             <div class="input-row input-row-subtitle"><label>표 삽입</label></div>
-                            <div class="input-row"><label>표 데이터</label><textarea id="bamTableData" rows="5" placeholder="엑셀/시트에서 복사해 붙여넣으세요. (탭=열, 줄바꿈=행 → 자동 인식) · 실제 표는 글 맨 아래에 생성됩니다"></textarea></div>
+                            <div class="input-row"><label>표 데이터</label><textarea id="bamTableData" rows="5" placeholder="제미나이 표(| 구분 | 내용 |) 또는 엑셀/시트 복붙 → 행·열 자동 인식. 실제 표는 글 맨 아래에 생성됩니다"></textarea></div>
 
                             <hr style="border:0; border-top:1px dashed #ddd; width:100%; margin: 10px 0;">
                         </div>
