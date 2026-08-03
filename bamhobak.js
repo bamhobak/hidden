@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.10";
+var _bamVersion = "1.0.9.11";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -5852,6 +5852,23 @@ function ChangeDocumentModelImageSlide2() {
     return true;
 }
 
+// 텍스트 컴포넌트인데 내용이 비어있는지(공백/제로폭 포함)
+function bamIsEmptyTextComp(c) {
+    if (!c || c["@ctype"] !== "text") return false;
+    let s = "";
+    try {
+        if (Array.isArray(c.value)) {
+            for (let p of c.value) {
+                if (p && Array.isArray(p.nodes)) {
+                    for (let n of p.nodes) { if (n && typeof n.value === "string") s += n.value; }
+                }
+            }
+        }
+    } catch (e) {}
+    s = s.replace(/[\s​]/g, "");
+    return s === "";
+}
+
 function HideDocumentModelImageSlide() {
     let srcText = this.DocumentModel;
 
@@ -5866,24 +5883,26 @@ function HideDocumentModelImageSlide() {
 
         let hiddenImageCount = 0;
 
-        // 범위에 맞는 슬라이드 imageGroup 전부 수집
-        let matchedSlides = [];
-        componentsObject.forEach(jComponent => {
-            if (jComponent && jComponent["@ctype"] === "imageGroup" && jComponent["layout"] && jComponent["layout"].includes("slide")) {
-                let imagesCount = jComponent.images ? jComponent.images.length : 0;
-                if (imagesCount >= hideSlideImageCountStart && imagesCount <= hideSlideImageCountEnd) {
-                    matchedSlides.push(jComponent);
-                }
-            }
-        });
+        // 글 끝에서부터 거슬러 올라가며, 하단에 연속으로 붙어있는 슬라이드 묶음(5~10장)을 모두 숨김.
+        // 빈 문단(공백)은 건너뛰고, 진짜 본문 콘텐츠를 만나면 멈춤 → 중간 슬라이드는 유지.
+        for (let i = componentsObject.length - 1; i >= 0; i--) {
+            let c = componentsObject[i];
+            if (!c) continue;
 
-        // 맨 아래(마지막) 슬라이드 세트 하나만 숨김 (본문 중간 슬라이드는 유지)
-        if (matchedSlides.length > 0) {
-            let lastSlide = matchedSlides[matchedSlides.length - 1];
-            lastSlide.layout = "slide.se-blind";
-            hiddenImageCount++;
-            console.log("Slide Image Hidden (bottom only)");
+            if (c["@ctype"] === "imageGroup" && c["layout"] && c["layout"].includes("slide")) {
+                let cnt = c.images ? c.images.length : 0;
+                if (cnt >= hideSlideImageCountStart && cnt <= hideSlideImageCountEnd) {
+                    c.layout = "slide.se-blind";
+                    hiddenImageCount++;
+                    continue;              // 계속 위로
+                }
+                break;                     // 범위 밖 슬라이드 = 경계, 멈춤
+            }
+
+            if (bamIsEmptyTextComp(c)) continue;   // 빈 문단은 건너뜀
+            break;                          // 진짜 본문 콘텐츠 → 멈춤
         }
+        console.log("Slide Image Hidden (bottom group): " + hiddenImageCount);
 
         // 처리된 슬라이드 이미지 개수 정보 저장
         //this.SlideImageInfo = `${hiddenImageCount}개 슬라이드 히든 처리`;
