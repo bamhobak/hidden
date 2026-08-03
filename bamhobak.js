@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.9";
+var _bamVersion = "1.0.9.10";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -5866,55 +5866,24 @@ function HideDocumentModelImageSlide() {
 
         let hiddenImageCount = 0;
 
-        // 컴포넌트 배열을 순회
+        // 범위에 맞는 슬라이드 imageGroup 전부 수집
+        let matchedSlides = [];
         componentsObject.forEach(jComponent => {
-            //console.log(jComponent.id + " " + jComponent["@ctype"]);
-
-            // ctype이 "imageGroup"이고 layout이 "slide"인 컴포넌트 찾기
-            //if (jComponent["@ctype"] === "imageGroup" && jComponent["layout"] === "slide") {
-			if (jComponent["@ctype"] === "imageGroup" && jComponent["layout"].includes("slide") ) {
-                let imagesCount = jComponent.images.length;
-
-                // 이미지 개수가 지정된 범위에 포함될 경우
+            if (jComponent && jComponent["@ctype"] === "imageGroup" && jComponent["layout"] && jComponent["layout"].includes("slide")) {
+                let imagesCount = jComponent.images ? jComponent.images.length : 0;
                 if (imagesCount >= hideSlideImageCountStart && imagesCount <= hideSlideImageCountEnd) {
-                    // contentMode 값을 변경
-
-					//jComponent.contentMode = "fit spi_default spi_list spi_blind";
-					//jComponent.contentMode = "fit se-viewer se-schedule-info-title";
-					//jComponent.contentMode = "fit blind";
-					//jComponent.contentMode = "fit layerpop2";
-					jComponent.layout = "slide.se-blind";
-					
-					//jComponent.contentMode = "extend se-blind";
-
-					
-                    //jComponent.contentMode = "fit spi_blind layerpop2 se-viewer se-blind";
-
-					// 히든 태그
-					// 1) width:1px;height:1px;overflow:hidden;position:absolute;
-					// 2) .spi_default .spi_list a .spi_blind {
-					//    overflow: hidden;
-					//    position: absolute;
-					//    clip: rect(0 0 0 0);
-					//    width: 1px;
-					//    height: 1px;
-					//    margin: -1px;
-					//    padding: 0;
-					//    border: 0;
-					//}
-					// 2안과 동일 구조 (se.viewer.desktop.css)
-					//.se-viewer .se-audio-loading
-					//.se-viewer .se-material-shopping .se-material-detail-title
-					//.se-viewer .se-material-news .se-material-detail-title 
-					//.se-viewer .se-material-news-bSize .se-material-detail-title
-
-
-					
-                    console.log("Slide Image Hidden Patched!!");
-                    hiddenImageCount++;
+                    matchedSlides.push(jComponent);
                 }
             }
         });
+
+        // 맨 아래(마지막) 슬라이드 세트 하나만 숨김 (본문 중간 슬라이드는 유지)
+        if (matchedSlides.length > 0) {
+            let lastSlide = matchedSlides[matchedSlides.length - 1];
+            lastSlide.layout = "slide.se-blind";
+            hiddenImageCount++;
+            console.log("Slide Image Hidden (bottom only)");
+        }
 
         // 처리된 슬라이드 이미지 개수 정보 저장
         //this.SlideImageInfo = `${hiddenImageCount}개 슬라이드 히든 처리`;
