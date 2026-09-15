@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.11";
+var _bamVersion = "1.0.9.13";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -473,6 +473,42 @@ var _bamSETitleTextList = [
 		[ "SE-a29625fe-14c0-45ac-9905-c134e718c24b", "SE-66987fce-a5da-427e-8f56-6f54040d13aa", "SE-74b31fc7-716c-4fb5-91ca-31f4573ec8eb", "SE-34120bea-51a8-4b94-8af1-4554e11cf595" ],
 		[ "SE-76f900a0-71df-4b2c-9302-8e8ab4b2d815", "SE-a2fd71c6-f805-45af-a15b-ba7831f249dd", "SE-b47124af-19b8-42b2-aa2b-1778128ce4ba", "SE-d6512bb0-cb52-465b-bde5-bd7d798d04b2" ],
 		[ "SE-bc7274ac-37f5-438a-8315-290abf10ca39", "SE-1875d350-05e3-4b70-8f48-dd37bfa46a52", "SE-c3160d34-87f4-4efa-b838-25b0f64f0679", "SE-dc2e1417-cfab-46c4-9aba-3228c45271ac" ],
+
+		// --- v1.0.9.12 추가: 소제목 9·10 그룹용 (기존 인덱스 뒤에 이어 붙임) ---
+		[ "SE-02a1893d-00bc-4492-ba6f-fc3cf4fbb09b", "SE-a819f070-8693-481b-9a8c-d6fb62f9cc28", "SE-2a4f2d3b-b109-43ea-8ef7-e537bdb020ad", "SE-42f275f6-94d7-4bbf-b819-19c7d6508d03" ],
+		[ "SE-1c3a292c-bae9-4f8c-9d06-55e5644a0ddb", "SE-3d6ed499-9df1-4048-b33a-84f51d7b5a31", "SE-4d8747f4-4d57-4d32-86a7-fedcf869e0b6", "SE-26b3e021-e784-4609-9924-62f7dc01df4c" ],
+		[ "SE-f99d3e1a-23e2-4b7b-819d-3f37579cde25", "SE-4859079f-7efc-4eb8-9a43-631ff9fa997a", "SE-560d3308-f9c5-47b3-90d4-cd2dc55e6963", "SE-688e0cbc-56bb-4385-8541-02aca3a50842" ],
+		[ "SE-7e7081a1-69f4-48e5-abcf-8ac6e189387a", "SE-36f3ccb1-b335-4af3-8a97-b66f1576f87a", "SE-6ac907e8-92d6-49ab-ad7d-a9159d69bd67", "SE-d0e765ec-bab9-4380-87f9-06f6ad6ef4b5" ],
+		[ "SE-19da1b91-3097-4e9b-a054-f476cf571068", "SE-ca4b76d0-0fbc-4e1d-80c1-5164122e266a", "SE-c5c9f586-2b1a-4668-80f5-983d8e34c0c1", "SE-5bef6a98-eea9-493a-88fe-6c5e639a9f43" ],
+		[ "SE-28c07caa-475d-4df8-9976-e826f29ac116", "SE-56f447f3-e6e4-45bf-a234-8bfd7c64e06a", "SE-675943b3-b6e0-456c-aeb4-7b0d3dd64e43", "SE-b61b5b70-7dd0-484f-b5ed-7b413aeaba80" ],
+		[ "SE-3b7a9146-1997-4ba9-b5fc-58f9bddd2d9a", "SE-b561b800-d089-4680-b8ed-b0e965481f16", "SE-a4eebfa1-f925-4dd8-9d3b-d3e7ca3e5f0c", "SE-a6d49585-dde6-4135-ab90-d41505cd5601" ],
+		[ "SE-79a997b7-1c16-42c2-b843-8969458cd68a", "SE-ac930ed6-77de-482e-8d17-fb23b2876c81", "SE-4177514a-a0b9-40a2-a4fc-67209a255585", "SE-f9526825-aba7-4548-b1e0-9083676e340f" ],
+		[ "SE-d9e7742e-67fc-43a9-a04c-fc174803a7f2", "SE-a293ad7c-fdf9-45b7-981b-066752067d50", "SE-eaea1921-c81b-4f43-ab3b-fecfdaa97140", "SE-0355bcae-1441-40a1-90ed-af8a0d6ce27b" ],
+		[ "SE-f0fcaade-3e05-438c-963f-b2df1516e91c", "SE-9f555bc9-f922-476f-bbe2-b08a5f1f36e4", "SE-281a8560-adc4-4627-887f-e60f419865e0", "SE-93c51f09-980e-4c3b-9264-5c6eb438e8bd" ],
+		[ "SE-dbbe00bd-8bfd-48a6-87f9-e2f4af538c12", "SE-949dd0f5-e094-4b4b-950b-8342979c1425", "SE-43abf24c-f110-4619-84e0-02a094427574", "SE-df5f7c33-8880-4044-a8b7-0ca60572e7a9" ],
+		[ "SE-83c7776a-2811-4aec-b354-e119e2101cf4", "SE-ca1e886e-dbc7-434f-a235-61fc9ed5a0df", "SE-2c6304d3-2b13-412a-a4c9-668079f49ccf", "SE-9ba40fbc-ec81-4216-b073-e32c563c7c8c" ],
+		[ "SE-79a45717-2084-4fa2-adca-d3f777202aad", "SE-168a2054-0c35-4617-b4a4-b55c71938679", "SE-6985bc30-d50b-4ce2-b8dc-d9f37b504b4f", "SE-93bd678f-d6e0-465c-a9a8-dc4b5907cbf9" ],
+		[ "SE-e6e028af-8436-48da-9f8d-f04276f83b78", "SE-10631bf1-d2be-4511-8015-3f7c0a8eb6dc", "SE-ef13cf7a-e2ea-4819-aef4-11836f5873cc", "SE-3b42b93b-4ab4-49ca-9288-3d62ea1d6fa6" ],
+		[ "SE-4e9c6979-5b30-4c35-93e5-2e2653753ee0", "SE-2b7a4d3c-eab5-4b6d-b78c-f719a97f4ffc", "SE-697bda2e-a3b9-4dcc-9526-c4bbbda89ab5", "SE-c3c6d5fd-172a-498e-ab70-fbe0e7f8feab" ],
+		[ "SE-75458782-95d4-44ec-867a-5225585280ef", "SE-a1aaa360-e59f-4f28-b147-47eae319bb59", "SE-0cd51b3f-357d-4488-881b-25df6811d4df", "SE-30d2c144-d0f1-4c6a-a96d-21a517727ee9" ],
+		[ "SE-983bba23-5d1f-4b90-8052-450af6e3ca59", "SE-2a939137-0c7f-4ac6-8044-127a7fb48247", "SE-ebe8a2c1-8dbc-4f14-89b4-cd19f5b1b11f", "SE-88318c66-276f-45ab-adcb-0704a3d57a22" ],
+		[ "SE-50679b05-1910-4569-846d-45978bc898c5", "SE-a5671251-b526-46a2-9612-29bffd43daf3", "SE-ff2ac82e-e32a-48c9-8408-c2ffec3c981b", "SE-9fbc5a42-ae70-40fe-a5d9-094238e537f7" ],
+		[ "SE-1046f304-a6bb-4858-a3cd-72600afc833f", "SE-9604c8ec-09cc-4f0d-bfbd-704b8fb64415", "SE-b7117590-1dda-4e72-a6ad-de18e2637a5f", "SE-83eec1bb-cfa1-49b4-b3a2-5fddc1c327e5" ],
+		[ "SE-eea55900-b008-4bc9-a356-348f60fb3696", "SE-49a7deaa-9712-49b2-9083-26e162623e08", "SE-657cdc8a-a625-45a1-b15f-a99666e5dbf7", "SE-ab3f2544-5bd4-478b-8307-84fb13e0e514" ],
+		[ "SE-6eb63fa1-70b9-4038-8ffd-bf7f0ba26c33", "SE-fb02a339-da33-4b7d-887b-1245d29d8711", "SE-564864ab-c810-43ab-bb08-a65cd3afa2c1", "SE-316aa9bb-5cc8-46bc-8078-bdb822190316" ],
+		[ "SE-7f29d924-2563-4863-8ffc-689098d57ab6", "SE-a513e573-6a70-4dbc-8580-d73cea3a1405", "SE-791b6c87-7079-4b26-be73-2553fd740cba", "SE-61aea92e-6a19-4f33-8a29-c976dee60718" ],
+		[ "SE-6d321512-1709-4227-8cd6-52f693a8e44b", "SE-b89d6a0a-487c-4511-800e-e4aca1c9b270", "SE-167f9ea7-793a-4df3-994f-e6d598ea50f7", "SE-b2695c30-4be8-4e4b-ad66-06c6dd9de38f" ],
+		[ "SE-55c138be-6a58-42f6-bc22-8458ddc51524", "SE-650a836a-4dba-4b2c-bae6-d9338908ce31", "SE-e1df8a2e-4fa1-4fcd-9c09-2a6322b3cb46", "SE-83588b22-a093-43f5-8a3a-032c7d8661f9" ],
+		[ "SE-0d7b1767-db7c-452a-9e5a-c847b430c4ed", "SE-34151b42-bdab-4a4b-ae1e-be1411f0727a", "SE-ac77860d-c07e-49f4-979a-b1f81b80b7d5", "SE-498eb71c-2021-45e4-b5ac-7e102ad594ce" ],
+		[ "SE-4dadea4c-e635-40ff-961a-2be42452924d", "SE-0634b13f-dd14-464c-81ef-e9fe80910f84", "SE-8e924b8e-20c5-472c-86cc-5b109787b736", "SE-414679ea-b6a0-4f81-a85a-f8f93449cb8d" ],
+		[ "SE-0d08a11d-67a8-441b-931e-6eca06954f7e", "SE-31f85329-6de4-4cc3-9b64-be26b4de52e5", "SE-a7257c3e-197d-4cd3-9417-65874d089684", "SE-b7909bbb-841e-4b25-b659-2ca80dea2aeb" ],
+		[ "SE-0fbf8a1b-9142-4176-9a3f-56c1b0f727bd", "SE-3f58ed33-ae09-405c-865c-6a99b45f22d2", "SE-d932f4fa-68eb-4053-8284-8e340ad61349", "SE-505a0aa6-e71c-4788-9bb3-ac2d23324ef1" ],
+		[ "SE-603ee212-acdd-43cf-9d02-d7e3dfe46a14", "SE-32ad523c-eacc-4d23-8854-fb795d4feccd", "SE-ba7eb8c3-0a92-48d5-8980-b941e794704c", "SE-7d7a60d2-85ca-44e6-9dc7-a82222420ecc" ],
+		[ "SE-36823a5c-3e62-4e56-a3ca-4601c46a9714", "SE-4ac7ca7f-afc9-47c1-a93d-8bdc53930515", "SE-d1cb0eca-87f7-44f6-ba65-41559121faaa", "SE-2c5b68dc-26c3-41ae-a97b-012d9ae5a206" ],
+		[ "SE-a8983c95-8788-4128-ade4-ba7fc8123fc3", "SE-4e1af47a-6630-411f-b387-86a46874c0bb", "SE-67774af7-0c4a-48e5-8d5b-2d6862636d5a", "SE-3704286b-7f45-493e-970b-610f6049ac3b" ],
+		[ "SE-772139b6-4f15-40c6-9d48-75af0f028531", "SE-bd31a176-8861-4af2-9348-a785d84c6b5c", "SE-eb719034-2297-4b4a-bb6e-547f463b9f82", "SE-6d85c617-fe90-4714-9e6e-2bae84cccda0" ],
+		[ "SE-d80c767d-f12c-41cd-b9d2-5600ab4a821d", "SE-a558a782-7a16-4c4b-9f52-b3087be406c5", "SE-7518509c-3d03-45e2-afc0-05bb33991ff3", "SE-d51a67ae-77b2-4382-b50b-ebc6156e5a63" ],
+		[ "SE-77fa38cb-1d74-41c9-84c2-7f3b5980b04b", "SE-10d56f57-1eae-45e4-9bfc-a8bc8b716973", "SE-64e4d3f3-25a2-465d-b606-58ceb5815ef6", "SE-1155b3db-42d1-4699-8ae9-d79c9c733e8c" ],
 ];
 
 
@@ -2316,6 +2352,8 @@ function ExtractCafeHiddenText() {
 			else if (i <= 16) SetTextValue("bamSubIntroTitle" + i, t);
 			else if (i <= 24) SetTextValue("bamSubTitle" + (i - 16), t);
 			else if (i <= 152) { let c = Math.floor((i - 25) / 8) + 1; let g = ((i - 25) % 8) + 1; SetTextValue("bamSub" + c + "Content" + g, t); }
+			else if (i <= 154) SetTextValue("bamSubTitle" + (i - 144), t);
+			else if (i <= 186) { let c = Math.floor((i - 155) / 2) + 1; let g = ((i - 155) % 2) + 9; SetTextValue("bamSub" + c + "Content" + g, t); }
 		}
 	} catch (ex) {
 		console.log("ExtractCafeHiddenText Exception : " + ex);
@@ -2432,7 +2470,8 @@ function ExtractHiddenText()
 //			foundText = foundText.replace(regex, '');
 
 			// 인덱스(위치) 기반 매핑 - 빈 슬롯을 건너뛰어도 정확히 복원됨
-			// 0:인사말제목 | 1..16:인사말내용 | 17..24:소제목 | 25..152:소제목내용(내용16 x 그룹8)
+			// 0:인사말제목 | 1..16:인사말내용 | 17..24:소제목1~8 | 25..152:소제목내용(내용16 x 그룹8)
+			// 153..154:소제목9~10 | 155..186:소제목내용(내용16 x 그룹9~10)
 			if(i === 0)
 			{
 				SetTextValue("bamIntroTitle1", foundText);
@@ -2449,6 +2488,16 @@ function ExtractHiddenText()
 			{
 				let c = Math.floor((i - 25) / 8) + 1;
 				let g = ((i - 25) % 8) + 1;
+				SetTextValue("bamSub" + c + "Content" + g, foundText);
+			}
+			else if(i <= 154)
+			{
+				SetTextValue("bamSubTitle" + (i - 144), foundText);
+			}
+			else if(i <= 186)
+			{
+				let c = Math.floor((i - 155) / 2) + 1;
+				let g = ((i - 155) % 2) + 9;
 				SetTextValue("bamSub" + c + "Content" + g, foundText);
 			}
 //			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + closeTitleNo)
@@ -2873,6 +2922,17 @@ function AttachJsonNodeTrust1() {
     return false;
 }
 
+// _bamSETitleTextList 인덱스 매핑
+// 기존 배치를 그대로 두고(옛 글 추출 호환) 9·10 그룹만 뒤에 이어 붙인다.
+// 0:인사말제목 | 1..16:인사말내용 | 17..24:소제목1~8 | 25..152:내용(c1..16 x 그룹1~8)
+// 153..154:소제목9~10 | 155..186:내용(c1..16 x 그룹9~10)
+function bamSEIdxSubTitle(g) {
+	return (g <= 8) ? (16 + g) : (144 + g);
+}
+function bamSEIdxContent(c, g) {
+	return (g <= 8) ? (25 + (c - 1) * 8 + (g - 1)) : (155 + (c - 1) * 2 + (g - 9));
+}
+
 function AttachJsonNodeTrust2() {
     try {
         let ReplaceContent = GetReplaceContent();
@@ -2908,7 +2968,7 @@ function AttachJsonNodeTrust2() {
 		let eCnt = 0;
 
 		let indexOfHiddenIntroTitle = [1];
-		let indexOfHiddenSubTitle = [2, 3, 4, 5, 6, 7, 8, 9];
+		let indexOfHiddenSubTitle = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 		let indexOfHiddenSub1Content = [2, 3, 4, 5, 6, 7, 8, 9];
 		let indexOfHiddenSub2Content = [2, 3, 4, 5, 6, 7, 8, 9];
 		let indexOfHiddenSub3Content = [2, 3, 4, 5, 6, 7, 8, 9];
@@ -2969,37 +3029,36 @@ function AttachJsonNodeTrust2() {
 		}
 
 
-		// SubTitle 노드 정의
-		for(let i = 0; i < 8; i++)
+		// SubTitle 노드 정의 (그룹 1..10 / 10번은 업체정보)
+		for(let i = 0; i < 10; i++)
 		{
-			let subTitleValue = GetSubTitle(i + 1);
+			let stEl = document.getElementById('bamSubTitle' + (i + 1));
+			let subTitleValue = stEl ? removeControlCharacters(stEl.value) : undefined;
 
 			//if( subTitleValue !== undefined && subTitleValue !== "" )
 			if( subTitleValue !== undefined && subTitleValue.trim() !== "" )
 			{
 
-				let paragraphText = replaceNodeTitleFontStyle(subTitleValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeSubTitleFontStyle);
+				let paragraphText = replaceNodeTitleFontStyle(subTitleValue, _bamSETitleTextList[bamSEIdxSubTitle(i + 1)], _bamInjectNodeSubTitleFontStyle);
 
 				subTitleNodeObjects[i] = JSON.parse(paragraphText);
-			}            
-			randomTitleIndex++;
+			}
 		}
 
-		// 내용 노드 정의 (내용번호 c=1..16, 그룹 g=1..8)
+		// 내용 노드 정의 (내용번호 c=1..16, 그룹 g=1..10)
 		let contentNodeObjects = [];
 		for (let c = 1; c <= 16; c++)
 		{
 			contentNodeObjects[c] = [];
-			for (let i = 0; i < 8; i++)
+			for (let i = 0; i < 10; i++)
 			{
 				let el = document.getElementById('bamSub' + c + 'Content' + (i + 1));
 				let val = el ? removeControlCharacters(el.value) : undefined;
 				if (val !== undefined && val.trim() !== "")
 				{
-					let paragraphText = replaceNodeTitleFontStyle(val, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
+					let paragraphText = replaceNodeTitleFontStyle(val, _bamSETitleTextList[bamSEIdxContent(c, i + 1)], _bamInjectNodeTextFontStyle);
 					contentNodeObjects[c][i] = JSON.parse(paragraphText);
 				}
-				randomTitleIndex++;
 			}
 		}
 
@@ -3069,7 +3128,7 @@ function AttachJsonNodeTrust2() {
 		}
 
 		// 내용 삽입 (내용번호 c=1..16)
-		let indexOfHiddenContent = [2, 3, 4, 5, 6, 7, 8, 9];
+		let indexOfHiddenContent = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 		for (let c = 1; c <= 16; c++)
 		{
 			let cCnt = 0;
@@ -3094,7 +3153,7 @@ function AttachJsonNodeTrust2() {
 		{
 			if (extraTargetComponents[indexOfHiddenContent[i] - 1] !== undefined) availSlots++;
 		}
-		for (let g = availSlots; g < 8; g++)
+		for (let g = availSlots; g < 10; g++)
 		{
 			if (subTitleNodeObjects[g] !== undefined)
 				componentsObject.push(subTitleNodeObjects[g]);
@@ -6534,10 +6593,10 @@ function bamSetupChunkedCollapse(idFn, total, chunk) {
 	bamApplyShown(idFn, total, chunk, bamNeededByFilled(idFn, total, chunk));
 }
 
-// 접기 대상 시리즈 목록 (인사말 + 소제목 8그룹)
+// 접기 대상 시리즈 목록 (인사말 + 소제목 10그룹)
 function bamCollapseSeriesList() {
 	let list = [ function(n){ return 'bamSubIntroTitle' + n; } ];
-	for (let g = 1; g <= 8; g++) {
+	for (let g = 1; g <= 10; g++) {
 		list.push((function(g){ return function(c){ return 'bamSub' + c + 'Content' + g; }; })(g));
 	}
 	return list;
@@ -6570,7 +6629,7 @@ function bamGetContentSeries(el) {
 	let id = el.id;
 	let m;
 
-	m = id.match(/^bamSubTitle([1-8])$/);
+	m = id.match(/^bamSubTitle([0-9]+)$/);
 	if (m) {
 		let g = m[1];
 		let series = [ document.getElementById('bamSubTitle' + g) ];
@@ -6578,7 +6637,7 @@ function bamGetContentSeries(el) {
 		return { series: series, start: 0 };
 	}
 
-	m = id.match(/^bamSub([0-9]+)Content([1-8])$/);
+	m = id.match(/^bamSub([0-9]+)Content([0-9]+)$/);
 	if (m) {
 		let c0 = parseInt(m[1], 10);
 		let g = m[2];
@@ -6609,7 +6668,7 @@ function setupParagraphPasteDistribution() {
 	let ids = [];
 	ids.push('bamIntroTitle1');
 	for (let n = 1; n <= 16; n++) ids.push('bamSubIntroTitle' + n);
-	for (let g = 1; g <= 8; g++) {
+	for (let g = 1; g <= 10; g++) {
 		ids.push('bamSubTitle' + g);
 		for (let c = 1; c <= 16; c++) ids.push('bamSub' + c + 'Content' + g);
 	}
@@ -6966,6 +7025,26 @@ const html = `
 							<div class="input-row"><label>내용6</label><textarea id="bamSub6Content8" rows="1"></textarea></div>
 							<div class="input-row"><label>내용7</label><textarea id="bamSub7Content8" rows="1"></textarea></div>
 							<div class="input-row"><label>내용8</label><textarea id="bamSub8Content8" rows="1"></textarea></div>
+                            
+                            <div class="input-row input-row-subtitle"><label>9. 소제목</label><input type="text" id="bamSubTitle9"></div>
+                            <div class="input-row"><label>내용1</label><textarea id="bamSub1Content9" rows="1"></textarea></div>
+							<div class="input-row"><label>내용2</label><textarea id="bamSub2Content9" rows="1"></textarea></div>
+							<div class="input-row"><label>내용3</label><textarea id="bamSub3Content9" rows="1"></textarea></div>
+							<div class="input-row"><label>내용4</label><textarea id="bamSub4Content9" rows="1"></textarea></div>
+							<div class="input-row"><label>내용5</label><textarea id="bamSub5Content9" rows="1"></textarea></div>
+							<div class="input-row"><label>내용6</label><textarea id="bamSub6Content9" rows="1"></textarea></div>
+							<div class="input-row"><label>내용7</label><textarea id="bamSub7Content9" rows="1"></textarea></div>
+							<div class="input-row"><label>내용8</label><textarea id="bamSub8Content9" rows="1"></textarea></div>
+                            
+                            <div class="input-row input-row-subtitle"><label>업체정보</label><input type="text" id="bamSubTitle10"></div>
+                            <div class="input-row"><label>내용1</label><textarea id="bamSub1Content10" rows="1"></textarea></div>
+							<div class="input-row"><label>내용2</label><textarea id="bamSub2Content10" rows="1"></textarea></div>
+							<div class="input-row"><label>내용3</label><textarea id="bamSub3Content10" rows="1"></textarea></div>
+							<div class="input-row"><label>내용4</label><textarea id="bamSub4Content10" rows="1"></textarea></div>
+							<div class="input-row"><label>내용5</label><textarea id="bamSub5Content10" rows="1"></textarea></div>
+							<div class="input-row"><label>내용6</label><textarea id="bamSub6Content10" rows="1"></textarea></div>
+							<div class="input-row"><label>내용7</label><textarea id="bamSub7Content10" rows="1"></textarea></div>
+							<div class="input-row"><label>내용8</label><textarea id="bamSub8Content10" rows="1"></textarea></div>
 
 
                             <hr style="border:0; border-top:1px dashed #ddd; width:100%; margin: 10px 0;">
