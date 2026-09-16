@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.13";
+var _bamVersion = "1.0.9.14";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -2354,6 +2354,7 @@ function ExtractCafeHiddenText() {
 			else if (i <= 152) { let c = Math.floor((i - 25) / 8) + 1; let g = ((i - 25) % 8) + 1; SetTextValue("bamSub" + c + "Content" + g, t); }
 			else if (i <= 154) SetTextValue("bamSubTitle" + (i - 144), t);
 			else if (i <= 186) { let c = Math.floor((i - 155) / 2) + 1; let g = ((i - 155) % 2) + 9; SetTextValue("bamSub" + c + "Content" + g, t); }
+			else if (i <= 190) SetTextValue("bamSubIntroTitle" + (i - 170), t);
 		}
 	} catch (ex) {
 		console.log("ExtractCafeHiddenText Exception : " + ex);
@@ -2471,7 +2472,7 @@ function ExtractHiddenText()
 
 			// 인덱스(위치) 기반 매핑 - 빈 슬롯을 건너뛰어도 정확히 복원됨
 			// 0:인사말제목 | 1..16:인사말내용 | 17..24:소제목1~8 | 25..152:소제목내용(내용16 x 그룹8)
-			// 153..154:소제목9~10 | 155..186:소제목내용(내용16 x 그룹9~10)
+			// 153..154:소제목9~10 | 155..186:소제목내용(내용16 x 그룹9~10) | 187..190:인사말내용17~20
 			if(i === 0)
 			{
 				SetTextValue("bamIntroTitle1", foundText);
@@ -2499,6 +2500,10 @@ function ExtractHiddenText()
 				let c = Math.floor((i - 155) / 2) + 1;
 				let g = ((i - 155) % 2) + 9;
 				SetTextValue("bamSub" + c + "Content" + g, foundText);
+			}
+			else if(i <= 190)
+			{
+				SetTextValue("bamSubIntroTitle" + (i - 170), foundText);
 			}
 //			else if(foundTitleNodeCount <= introTitleNo + subIntroTitleNo + subTitleNo + subSub1ContentNo + subSub2ContentNo + subSub3ContentNo + subSub4ContentNo + closeTitleNo)
 //			{
@@ -2925,7 +2930,10 @@ function AttachJsonNodeTrust1() {
 // _bamSETitleTextList 인덱스 매핑
 // 기존 배치를 그대로 두고(옛 글 추출 호환) 9·10 그룹만 뒤에 이어 붙인다.
 // 0:인사말제목 | 1..16:인사말내용 | 17..24:소제목1~8 | 25..152:내용(c1..16 x 그룹1~8)
-// 153..154:소제목9~10 | 155..186:내용(c1..16 x 그룹9~10)
+// 153..154:소제목9~10 | 155..186:내용(c1..16 x 그룹9~10) | 187..190:인사말내용17~20
+function bamSEIdxIntroContent(n) {
+	return (n <= 16) ? n : (170 + n);
+}
 function bamSEIdxSubTitle(g) {
 	return (g <= 8) ? (16 + g) : (144 + g);
 }
@@ -3014,18 +3022,17 @@ function AttachJsonNodeTrust2() {
 		}
 
 
-		// SubIntroTitle 노드 정의 (인사말 내용 1..16)
-		for(let i = 0; i < 16; i++)
+		// SubIntroTitle 노드 정의 (인사말 내용 1..20)
+		for(let i = 0; i < 20; i++)
 		{
 			let el = document.getElementById('bamSubIntroTitle' + (i + 1));
 			let subIntroTitleValue = el ? removeControlCharacters(el.value) : undefined;
 
 			if( subIntroTitleValue !== undefined && subIntroTitleValue.trim() !== "" )
 			{
-				let paragraphText = replaceNodeTitleFontStyle(subIntroTitleValue, _bamSETitleTextList[randomTitleIndex], _bamInjectNodeTextFontStyle);
+				let paragraphText = replaceNodeTitleFontStyle(subIntroTitleValue, _bamSETitleTextList[bamSEIdxIntroContent(i + 1)], _bamInjectNodeTextFontStyle);
 				subIntroTitleNodeObjects[i] = JSON.parse(paragraphText);
 			}
-			randomTitleIndex++;
 		}
 
 
@@ -6593,6 +6600,9 @@ function bamSetupChunkedCollapse(idFn, total, chunk) {
 	bamApplyShown(idFn, total, chunk, bamNeededByFilled(idFn, total, chunk));
 }
 
+var _bamIntroContentMax = 20;	// 인사말 내용 칸 수
+var _bamSubContentMax = 16;		// 소제목별 내용 칸 수
+
 // 접기 대상 시리즈 목록 (인사말 + 소제목 10그룹)
 function bamCollapseSeriesList() {
 	let list = [ function(n){ return 'bamSubIntroTitle' + n; } ];
@@ -6602,12 +6612,18 @@ function bamCollapseSeriesList() {
 	return list;
 }
 
-// 인사말/각 소제목 내용을 1..16으로 확장하고 4개 단위로 접는다.
+// 시리즈별 칸 수 (0번=인사말)
+function bamCollapseSeriesTotal(i) {
+	return (i === 0) ? _bamIntroContentMax : _bamSubContentMax;
+}
+
+// 인사말(1..20)/각 소제목 내용(1..16)을 확장하고 4개 단위로 접는다.
 function setupCollapsibleSubContents() {
 	let list = bamCollapseSeriesList();
 	for (let i = 0; i < list.length; i++) {
-		bamExpandSeries(list[i], 9, 16, function(n){ return '내용' + n; });
-		bamSetupChunkedCollapse(list[i], 16, 4);
+		let total = bamCollapseSeriesTotal(i);
+		bamExpandSeries(list[i], 9, total, function(n){ return '내용' + n; });
+		bamSetupChunkedCollapse(list[i], total, 4);
 	}
 }
 
@@ -6616,9 +6632,10 @@ function refreshCollapsibleSubContents() {
 	let list = bamCollapseSeriesList();
 	for (let i = 0; i < list.length; i++) {
 		let idFn = list[i];
-		let need = bamNeededByFilled(idFn, 16, 4);
-		if (need > bamGetShown(idFn, 16)) {
-			bamApplyShown(idFn, 16, 4, need);
+		let total = bamCollapseSeriesTotal(i);
+		let need = bamNeededByFilled(idFn, total, 4);
+		if (need > bamGetShown(idFn, total)) {
+			bamApplyShown(idFn, total, 4, need);
 		}
 	}
 }
@@ -6648,7 +6665,7 @@ function bamGetContentSeries(el) {
 
 	if (id === 'bamIntroTitle1') {
 		let series = [ document.getElementById('bamIntroTitle1') ];
-		for (let n = 1; n <= 16; n++) series.push(document.getElementById('bamSubIntroTitle' + n));
+		for (let n = 1; n <= _bamIntroContentMax; n++) series.push(document.getElementById('bamSubIntroTitle' + n));
 		return { series: series, start: 0 };
 	}
 
@@ -6656,7 +6673,7 @@ function bamGetContentSeries(el) {
 	if (m) {
 		let n0 = parseInt(m[1], 10);
 		let series = [ document.getElementById('bamIntroTitle1') ];
-		for (let n = 1; n <= 16; n++) series.push(document.getElementById('bamSubIntroTitle' + n));
+		for (let n = 1; n <= _bamIntroContentMax; n++) series.push(document.getElementById('bamSubIntroTitle' + n));
 		return { series: series, start: n0 };
 	}
 
@@ -6667,7 +6684,7 @@ function bamGetContentSeries(el) {
 function setupParagraphPasteDistribution() {
 	let ids = [];
 	ids.push('bamIntroTitle1');
-	for (let n = 1; n <= 16; n++) ids.push('bamSubIntroTitle' + n);
+	for (let n = 1; n <= _bamIntroContentMax; n++) ids.push('bamSubIntroTitle' + n);
 	for (let g = 1; g <= 10; g++) {
 		ids.push('bamSubTitle' + g);
 		for (let c = 1; c <= 16; c++) ids.push('bamSub' + c + 'Content' + g);
