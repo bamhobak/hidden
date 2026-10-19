@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.20";
+var _bamVersion = "1.0.9.21";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -6590,6 +6590,39 @@ function get_main_frame_document()
     return mainFrameDocument;
 }
 
+// 글 하나를 보고 있는 주소인지 (블로그 홈·목록·글쓰기 화면은 아님)
+// blog.naver.com/아이디        -> 아님 (버튼 안 붙임)
+// blog.naver.com/아이디/글번호 -> 맞음
+function bamIsBlogPostUrl()
+{
+    try {
+        let href = window.location.href;
+        if (href.indexOf("blog.naver.com") < 0) return false;
+
+        // 글쓰기·수정 화면은 제외
+        if (/[?&]Redirect=(Write|Update)/i.test(href)) return false;
+
+        // PostView.naver?blogId=..&logNo=.. 처럼 글번호가 주소에 있는 경우
+        if (/[?&]logNo=\d+/i.test(href)) return true;
+
+        // blog.naver.com/아이디/글번호
+        let path = window.location.pathname || "";
+        return /^\/[^\/]+\/\d+/.test(path);
+    } catch (ex) {
+        return false;
+    }
+}
+
+// 글 주소가 아닐 때 이미 붙어 있던 버튼을 떼어낸다
+function bamRemoveExecuteButton()
+{
+    try {
+        let doc = get_main_frame_document();
+        let btn = doc.getElementById("bamhobakExecute");
+        if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
+    } catch (ex) {}
+}
+
 function bamInit()
 {
     console.log("start content script");
@@ -6597,13 +6630,23 @@ function bamInit()
     if (_bamIsCafe) { bamInitCafe(); return; }
 
 //	if( !CheckVersion() )
-//	{		
+//	{
 //		return;
 //	}
+
+    // 글 주소일 때만 버튼을 붙인다 (블로그 홈 blog.naver.com/아이디 에서는 안 붙임)
+    if( !bamIsBlogPostUrl() )
+    {
+        bamRemoveExecuteButton();
+        return;
+    }
 
     let mainFrameDocument = get_main_frame_document();
 
     var divElem = mainFrameDocument.getElementsByClassName("blog2_post_function");
+    if( divElem.length == 0 ) return;		// 버튼 붙일 자리가 없는 화면
+
+    if( mainFrameDocument.getElementById("bamhobakExecute") ) return;	// 이미 붙어 있음
 
     var buttonElem = mainFrameDocument.createElement("button");
     buttonElem.innerHTML = "🌰 히든 실행";
