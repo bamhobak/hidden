@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.21";
+var _bamVersion = "1.0.9.22";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -7902,12 +7902,21 @@ function bamFormulaConverter() {
             background: #fff; border-radius: 10px; padding: 12px 16px;
             box-shadow: 0 4px 18px rgba(0,0,0,.18);
             font: 12px 'Malgun Gothic', sans-serif; color: #444;
-            display: none; align-items: center; gap: 10px; white-space: nowrap;
+            display: none; white-space: nowrap;
         }
-        .nfc-cfg.show { display: flex; }
+        .nfc-cfg.show { display: block; }
+        .nfc-cfg-row { display: flex; align-items: center; gap: 10px; }
+        .nfc-cfg-row + .nfc-cfg-row { margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee; }
         .nfc-cfg input[type=number] { width: 48px; padding: 2px 4px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 12px; }
+        .nfc-cfg input[type=text] { width: 130px; padding: 3px 7px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; }
         .nfc-cfg .nfc-sep { color: #ccc; margin: 0 2px; }
         .nfc-cfg .nfc-chk { display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; }
+        .nfc-cfg .nfc-phrase {
+            padding: 5px 11px; border: 1px solid #03c75a; border-radius: 6px;
+            background: #fff; color: #03c75a; font: 700 12px 'Malgun Gothic', sans-serif;
+            cursor: pointer; transition: background .15s, color .15s;
+        }
+        .nfc-cfg .nfc-phrase:hover { background: #03c75a; color: #fff; }
     `);
 
     // ── UI 생성 ──────────────────────────────────────────────
@@ -7922,7 +7931,8 @@ function bamFormulaConverter() {
     const cfg = document.createElement('div');
     cfg.className = 'nfc-cfg';
     const ver = (typeof _bamVersion !== 'undefined' ? _bamVersion : '?');
-    cfg.innerHTML = `<span style="color:#bbb;font-size:10px;letter-spacing:.3px">v${ver}</span><span class="nfc-sep">│</span>줄 너비 <input type="number" min="20" max="50" value="${lineLimit}"><span class="nfc-sep">│</span><label class="nfc-chk"><input type="checkbox" id="nfc-lalign"${alignMode === 'L' ? ' checked' : ''}> 좌측정렬</label><span class="nfc-sep">│</span><label class="nfc-chk"><input type="checkbox" id="nfc-sentence"${sentenceMode ? ' checked' : ''}> 문장단위</label>`;
+    cfg.innerHTML = `<div class="nfc-cfg-row"><span style="color:#bbb;font-size:10px;letter-spacing:.3px">v${ver}</span><span class="nfc-sep">│</span>줄 너비 <input type="number" min="20" max="50" value="${lineLimit}"><span class="nfc-sep">│</span><label class="nfc-chk"><input type="checkbox" id="nfc-lalign"${alignMode === 'L' ? ' checked' : ''}> 좌측정렬</label><span class="nfc-sep">│</span><label class="nfc-chk"><input type="checkbox" id="nfc-sentence"${sentenceMode ? ' checked' : ''}> 문장단위</label></div>`
+        + `<div class="nfc-cfg-row">업체명 <input type="text" id="nfc-shop" placeholder="예: 28지킴이치과"><button type="button" class="nfc-phrase" id="nfc-btn-fair">공정위문구</button><button type="button" class="nfc-phrase" id="nfc-btn-surgery">성형문구</button></div>`;
 
     (document.body || document.documentElement).append(fab, toast, cfg);
 
@@ -7945,6 +7955,8 @@ function bamFormulaConverter() {
         const orig = history[fn];
         history[fn] = function (...args) { orig.apply(history, args); setTimeout(updateFabVisibility, 50); };
     });
+
+    const shopInput = cfg.querySelector('#nfc-shop');
 
     const cfgNum = cfg.querySelector('input[type=number]');
     cfgNum.addEventListener('change', () => {
@@ -8008,9 +8020,11 @@ function bamFormulaConverter() {
             converted = raw;
         }
         const pad = `\\${alignMode}align `;
-        converted = pad + converted + pad;
+        await insertConverted(pad + converted + pad);
+    });
 
-        // 수식 버튼 자동 클릭 시도
+    // 변환된 수식을 편집기에 넣는다 (수식 버튼 자동 클릭 -> 안 되면 대기 모드)
+    async function insertConverted(converted) {
         const found = tryClickFormulaButton();
         if (found) {
             fab.classList.add('working');
@@ -8035,7 +8049,31 @@ function bamFormulaConverter() {
 
         // 대기 모드: 수식 버튼 직접 클릭 시 자동 삽입
         armAutoFill(converted);
-    });
+    }
+
+    // ── 고정 문구 버튼 (공정위 / 성형) ─────────────────────────
+    const PHRASE_FAIR = "본 포스팅은 의료광고법령 제56조 외 관련 법률을 모두 준수하여 'ㅇㅇㅇㅇ'에서 직접 작성한 내용으로 계약에 의해 등록된 포스팅입니다.";
+    const PHRASE_SURGERY = PHRASE_FAIR + ' 개인에 따라 염증 / 출혈 / 신경손상 등의 증상이 있을 수 있으니 주의해야 합니다.';
+
+    async function runPhrase(template) {
+        if (isInjecting) return;
+        if (armedText) disarm();
+
+        const name = (shopInput.value || '').trim();
+        if (!name) { showToast('업체명을 입력하세요.'); try { shopInput.focus(); } catch (_) {} return; }
+
+        const text = template.split('ㅇㅇㅇㅇ').join(name);
+        shopInput.value = '';          // 누를 때마다 비움 (저장하지 않음)
+        cfg.classList.remove('show');
+
+        const raw = sentenceMode ? convertSentences(text, lineLimit) : convert(text, lineLimit);
+        if (!raw) { showToast('변환할 텍스트가 없습니다.'); return; }
+        const pad = `\\${alignMode}align `;
+        await insertConverted(pad + raw + pad);
+    }
+
+    cfg.querySelector('#nfc-btn-fair').addEventListener('click', () => runPhrase(PHRASE_FAIR));
+    cfg.querySelector('#nfc-btn-surgery').addEventListener('click', () => runPhrase(PHRASE_SURGERY));
 
     function showToast(msg) {
         toast.textContent = msg;
