@@ -15,28 +15,17 @@
     --line: #e2e5e9;
     --paper: #ffffff;
     --bg: #f4f6f8;
-    --mark: #fff8e1;
-    --mark-line: #f0d98a;
-    --warn: #c0392b;
     --code-bg: #f0f2f5;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --ink: #e8eaed;
-      --ink-soft: #a3abb3;
-      --line: #343a40;
-      --paper: #1c1f23;
-      --bg: #131619;
-      --mark: #2a2616;
-      --mark-line: #5c5327;
-      --warn: #ff7b6b;
-      --code-bg: #272b30;
+      --ink: #e8eaed; --ink-soft: #a3abb3; --line: #343a40;
+      --paper: #1c1f23; --bg: #131619; --code-bg: #272b30;
     }
   }
   :root[data-theme="dark"] {
     --ink: #e8eaed; --ink-soft: #a3abb3; --line: #343a40;
-    --paper: #1c1f23; --bg: #131619; --mark: #2a2616;
-    --mark-line: #5c5327; --warn: #ff7b6b; --code-bg: #272b30;
+    --paper: #1c1f23; --bg: #131619; --code-bg: #272b30;
   }
 
   * { box-sizing: border-box; }
@@ -49,16 +38,15 @@
     line-height: 1.75;
     -webkit-text-size-adjust: 100%;
   }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px 80px; }
+  .wrap { max-width: 700px; margin: 0 auto; padding: 0 16px 70px; }
 
   header {
     border-bottom: 3px solid var(--green);
     background: var(--paper);
-    margin: 0 -16px 36px;
-    padding: 34px 16px 26px;
+    padding: 32px 16px 24px;
   }
-  header .inner { max-width: 760px; margin: 0 auto; }
-  h1 { margin: 0 0 6px; font-size: 27px; letter-spacing: -0.4px; }
+  header .inner { max-width: 700px; margin: 0 auto; }
+  h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: -0.4px; }
   .sub { margin: 0; color: var(--ink-soft); font-size: 15px; }
   .ver {
     display: inline-block; margin-top: 14px;
@@ -67,15 +55,10 @@
   }
   .ver b { color: var(--green-dark); font-variant-numeric: tabular-nums; }
 
-  .lead {
-    background: var(--paper); border: 1px solid var(--line);
-    border-left: 4px solid var(--green);
-    padding: 14px 18px; border-radius: 4px; margin-bottom: 34px;
-  }
-  .lead p { margin: 0; }
+  .lead { margin: 32px 0 30px; color: var(--ink-soft); }
 
   .step { display: flex; gap: 18px; padding: 26px 0; border-top: 1px solid var(--line); }
-  .step:first-of-type { border-top: 0; }
+  .step:first-of-type { border-top: 0; padding-top: 0; }
   .num {
     flex: 0 0 34px; height: 34px; border-radius: 50%;
     background: var(--green); color: #fff;
@@ -83,13 +66,12 @@
     font-weight: 700; font-size: 16px; margin-top: 2px;
   }
   .body { flex: 1 1 auto; min-width: 0; }
-  h2 { margin: 2px 0 10px; font-size: 20px; letter-spacing: -0.3px; }
-  h3 { margin: 30px 0 8px; font-size: 16px; }
+  h2 { margin: 2px 0 12px; font-size: 20px; letter-spacing: -0.3px; }
   p { margin: 0 0 10px; }
-  ol, ul { margin: 0 0 10px; padding-left: 22px; }
-  li { margin-bottom: 5px; }
+  ol { margin: 0; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  li:last-child { margin-bottom: 0; }
   li::marker { color: var(--ink-soft); }
-  strong { font-weight: 700; }
   kbd {
     background: var(--code-bg); border: 1px solid var(--line);
     border-bottom-width: 2px; border-radius: 4px;
@@ -101,9 +83,9 @@
   }
 
   .urlbox {
-    display: flex; align-items: stretch; gap: 0;
+    display: flex; align-items: stretch;
     border: 1px solid var(--line); border-radius: 6px;
-    overflow: hidden; background: var(--paper); margin: 12px 0 14px;
+    overflow: hidden; background: var(--paper); margin: 0 0 12px;
   }
   .urlbox code {
     flex: 1 1 auto; background: none; padding: 12px 14px;
@@ -117,35 +99,14 @@
   .copy:hover { background: var(--green-dark); }
   .copy.done { background: var(--ink-soft); }
 
-  .note {
-    background: var(--mark); border: 1px solid var(--mark-line);
-    border-radius: 5px; padding: 12px 16px; margin: 14px 0;
-    font-size: 15px;
-  }
-  .note p:last-child, .note ul:last-child { margin-bottom: 0; }
-  .note b { color: var(--warn); }
-
-  .qa { border-top: 1px solid var(--line); padding: 20px 0; }
-  .qa summary {
-    cursor: pointer; font-weight: 700; font-size: 16px;
-    list-style: none; display: flex; gap: 9px; align-items: baseline;
-  }
-  .qa summary::-webkit-details-marker { display: none; }
-  .qa summary::before { content: "▸"; color: var(--green); font-size: 13px; }
-  .qa[open] summary::before { content: "▾"; }
-  .qa .ans { padding: 10px 0 0 22px; }
-
-  .divider { margin: 44px 0 10px; }
-  .divider h2 { font-size: 19px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
-
   footer {
-    margin-top: 50px; padding-top: 18px; border-top: 1px solid var(--line);
+    margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--line);
     color: var(--ink-soft); font-size: 13px;
   }
   @media (max-width: 520px) {
     .step { gap: 12px; }
     .num { flex-basis: 28px; height: 28px; font-size: 14px; }
-    h1 { font-size: 23px; }
+    h1 { font-size: 22px; }
     .urlbox { flex-direction: column; }
     .copy { border-left: 0; border-top: 1px solid var(--line); padding: 10px; }
   }
@@ -163,23 +124,17 @@
 
 <div class="wrap">
 
-  <div class="lead">
-    <p><strong>PC마다 한 번씩만</strong> 하면 됩니다. 아래 4단계를 순서대로 따라 하세요.
-    한 번 깔아 두면 새 버전은 알아서 들어옵니다.</p>
-  </div>
+  <p class="lead">PC마다 한 번씩만 하면 됩니다.</p>
 
   <section class="step">
     <div class="num">1</div>
     <div class="body">
       <h2>예전 것 지우기</h2>
       <ol>
-        <li>크롬 오른쪽 위 <strong>텀퍼몽키 아이콘</strong> 클릭 → <strong>대시보드</strong></li>
+        <li>크롬 오른쪽 위 <strong>텀퍼몽키 아이콘</strong> → <strong>대시보드</strong></li>
         <li>목록에서 <code>Bamhobak new hidden+</code> 찾기</li>
         <li>오른쪽 끝 <strong>휴지통</strong> 아이콘을 눌러 삭제</li>
       </ol>
-      <div class="note">
-        <p><b>지우지 않고 새로 깔면</b> 같은 것이 두 개 돌 수 있습니다. 꼭 먼저 지워 주세요.</p>
-      </div>
     </div>
   </section>
 
@@ -187,103 +142,32 @@
     <div class="num">2</div>
     <div class="body">
       <h2>새로 설치하기</h2>
-      <p>아래 주소를 복사해서 <strong>주소창에 붙여넣고 엔터</strong>를 누르세요.</p>
       <div class="urlbox">
         <code id="url">https://bamhobak.github.io/hidden/hidden-plus.user.js</code>
         <button class="copy" type="button" data-target="url">복사</button>
       </div>
-      <p>텀퍼몽키 설치 화면이 뜨면 왼쪽 위 <strong>설치</strong> 버튼을 누릅니다.
-      코드를 복사해 붙여넣을 필요는 없습니다.</p>
+      <ol>
+        <li>위 주소를 복사해 <strong>주소창에 붙여넣고 엔터</strong></li>
+        <li>왼쪽 위 <strong>설치</strong> 버튼 누르기</li>
+        <li><strong>다운그레이드</strong> 버튼이 나오면 그것을 누르면 됩니다</li>
+      </ol>
     </div>
   </section>
 
   <section class="step">
     <div class="num">3</div>
     <div class="body">
-      <h2>업데이트 확인 주기 바꾸기</h2>
-      <p>기본값이 하루 한 번이라 새 버전이 늦게 들어옵니다. <strong>6시간</strong>으로 줄여 둡니다.</p>
+      <h2>업데이트 주기 바꾸기</h2>
       <ol>
         <li>텀퍼몽키 <strong>대시보드</strong> → 위쪽 <strong>설정</strong> 탭</li>
-        <li>아래쪽 <strong>스크립트 업데이트</strong> 칸을 찾습니다</li>
-        <li><strong>확인 주기</strong>를 <kbd>매일</kbd> 에서 <strong>6시간</strong>으로 바꿉니다</li>
-        <li>바로 저장됩니다 (위에 "작업이 성공적으로 완료됨" 이라고 뜹니다)</li>
+        <li>아래쪽 <strong>스크립트 업데이트</strong> 칸에서</li>
+        <li><strong>확인 주기</strong>를 <kbd>매일</kbd> → <strong>6시간</strong>으로 변경</li>
       </ol>
-      <div class="note">
-        <p><b>헷갈리기 쉬운 곳</b> — 맨 아래 <strong>외부</strong> 칸에도 <strong>업데이트 주기</strong>가 있는데
-        그건 다른 항목입니다. <strong>외부</strong>는 <kbd>안 함</kbd> 그대로 두고,
-        반드시 <strong>스크립트 업데이트</strong> 칸의 <strong>확인 주기</strong>를 바꾸세요.</p>
-      </div>
-      <p>설정 모드는 <strong>초보자 그대로</strong> 둬도 보입니다.</p>
     </div>
   </section>
-
-  <section class="step">
-    <div class="num">4</div>
-    <div class="body">
-      <h2>잘 깔렸는지 보기</h2>
-      <ol>
-        <li>네이버 블로그에서 <strong>글쓰기</strong> 화면을 엽니다</li>
-        <li>오른쪽에 떠 있는 초록색 <strong>변환</strong> 버튼을 <strong>마우스 오른쪽 클릭</strong></li>
-        <li>옵션창 맨 왼쪽에 <strong>버전 번호</strong>가 보이면 성공입니다</li>
-      </ol>
-      <p>글을 하나 열어서 제목 옆에 <strong>🌰 히든 실행</strong> 버튼이 보이는지도 같이 확인하면 좋습니다.</p>
-    </div>
-  </section>
-
-  <div class="divider"><h2>이런 게 뜬다면</h2></div>
-
-  <details class="qa">
-    <summary>"주의! 유저 스크립트 다운그레이드" 가 떠요</summary>
-    <div class="ans">
-      <p>예전 스크립트의 버전이 날짜(<code>2026-10-19</code>)로 되어 있어서,
-      텀퍼몽키가 숫자로 비교하다가 새 버전을 더 낮다고 착각하는 것입니다.</p>
-      <p><strong>취소</strong>를 누르고 <strong>1단계 삭제부터 다시</strong> 하시면 경고 없이 깔립니다.
-      그냥 <strong>다운그레이드</strong>를 눌러도 설치는 되지만, 지우고 까는 쪽이 깔끔합니다.</p>
-      <p>한 번 지우고 깔면 다음부터는 이 경고가 안 뜹니다.</p>
-    </div>
-  </details>
-
-  <details class="qa">
-    <summary>설치 화면이 안 뜨고 코드만 보여요</summary>
-    <div class="ans">
-      <p>크롬 확장 프로그램 페이지(<code>chrome://extensions</code>)에서
-      오른쪽 위 <strong>개발자 모드</strong>가 켜져 있는지 확인해 주세요.</p>
-    </div>
-  </details>
-
-  <details class="qa">
-    <summary>지금 깔린 버전이 몇인지 보고 싶어요</summary>
-    <div class="ans">
-      <ul>
-        <li>텀퍼몽키 <strong>대시보드 → 설치된 유저 스크립트</strong> 목록에서 이름 옆 버전</li>
-        <li>또는 글쓰기 화면에서 <strong>변환</strong> 버튼 우클릭 → 옵션창 맨 왼쪽</li>
-      </ul>
-    </div>
-  </details>
-
-  <div class="divider"><h2>지금 당장 새 버전을 받고 싶을 때</h2></div>
-
-  <h3>방법 1 — 설치 주소를 다시 열기 <span style="color:var(--green-dark)">(가장 확실)</span></h3>
-  <p>주소창에 아래를 다시 입력하면, 새 버전이 있을 때 <strong>업데이트</strong> 버튼이 있는 화면이 뜹니다.</p>
-  <div class="urlbox">
-    <code id="url2">https://bamhobak.github.io/hidden/hidden-plus.user.js</code>
-    <button class="copy" type="button" data-target="url2">복사</button>
-  </div>
-  <p>새 버전이 없으면 이미 설치되어 있다는 안내만 나오니, 눌러봐도 손해는 없습니다.
-  이 방법은 설정 모드나 메뉴 위치와 상관없이 항상 됩니다.</p>
-
-  <h3>방법 2 — 유틸리티 탭에서 한 번에 확인</h3>
-  <p>텀퍼몽키 <strong>대시보드</strong> → 위쪽 <strong>유틸리티</strong> 탭 → <strong>업데이트 확인</strong> 버튼.
-  깔려 있는 스크립트 전부를 한 번에 확인합니다.</p>
-
-  <h3>방법 3 — 목록에서 그 스크립트만 확인</h3>
-  <p><strong>설치된 유저 스크립트</strong> 탭에서 <code>Bamhobak new hidden+</code> 줄의
-  <strong>마지막 업데이트</strong> 날짜를 클릭합니다.
-  설정 모드가 초보자면 이 칸이 안 보일 수 있는데, 그럴 땐 방법 1이나 2로 하세요.</p>
 
   <footer>
-    밤호박 히든 플러스 · 현재 버전 v1.0.9.23<br>
-    이 페이지 주소 <code>https://bamhobak.github.io/hidden/install.html</code>
+    밤호박 히든 플러스 · v1.0.9.23
   </footer>
 
 </div>
