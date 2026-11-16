@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bamhobak new hidden+
 // @namespace    bamhobak
-// @version      1.0.9.27
+// @version      1.0.9.29
 // @description  밤호박 히든 플러스 (히든 삽입 + 텍스트 수식 변환기)
 // @author       bamhobak
 // @match        https://blog.naver.com/*
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 // ===== 본체 (bamhobak.js) =====
-var _bamVersion = "1.0.9.27";
+var _bamVersion = "1.0.9.29";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -7395,10 +7395,16 @@ function bamFormulaConverter() {
     var MATH_SAFE = {
         // 네이버 수식 편집기에서 실제로 깨지는 것만 바꾼다(2026-11-16 확인).
         // % & # ~ $ 는 그냥 글자로 들어가므로 손대지 않는다.
-        '\\': '＼', '^': '＾', '_': '＿', '{': '｛', '}': '｝'
+        '\\': '＼', '_': '＿', '{': '｛', '}': '｝'
     };
     function mathSafe(s) {
-        return s.replace(/[\\^_{}]/g, function (ch) { return MATH_SAFE[ch]; });
+        // 순서 중요: 먼저 전각으로 바꾸고, 그 다음에 ^ 를 감싼다.
+        // (반대로 하면 \text{ } 자체가 전각으로 바뀌어 버린다)
+        s = s.replace(/[\\_{}]/g, function (ch) { return MATH_SAFE[ch]; });
+
+        // ^ 는 \text{ } 로 감싸면 원래 모양 그대로 나온다 (네이버에서 확인, 2026-11-16)
+        // 붙어 있는 ^ 는 한 덩어리로 묶는다 (^^ -> \text{^^})
+        return s.replace(/\^+/g, function (m) { return '\\text{' + m + '}'; });
     }
 
     // 폭 0 또는 렌더 불가한 서식 문자 제거 (제로폭·방향지정·워드조이너·BOM·소프트하이픈 등)
@@ -7425,11 +7431,11 @@ function bamFormulaConverter() {
             }
         }
         if (line.length) lines.push(line.join(' '));
-        return lines.map(l => `\\${alignMode}align ` + l.replace(/ /g, '\\ ')).join('');
+        return lines.map(l => `\\${alignMode}align ` + mathSafe(l).replace(/ /g, '\\ ')).join('');
     }
 
     function convert(text, limit) {
-        const trimmed = mathSafe(stripInvisible(stripEmoji(text))).trim();
+        const trimmed = stripInvisible(stripEmoji(text)).trim();
         if (!trimmed) return '';
         const lines = trimmed.split('\n');
         const parts = [];
@@ -7546,7 +7552,7 @@ function bamFormulaConverter() {
             let prevTrailingSpace = false;
             for (const { text, color } of lineSegs) {
                 // 이모지·보이지않는문자 제거 + 모든 유니코드 공백(U+00A0 등)을 일반 공백으로 정규화 (□ 방지)
-                const clean = mathSafe(stripInvisible(stripEmoji(text))).replace(/\s/g, ' ');
+                const clean = stripInvisible(stripEmoji(text)).replace(/\s/g, ' ');
                 const chunks = clean.split(' ');
                 for (let i = 0; i < chunks.length; i++) {
                     if (!chunks[i]) continue;
@@ -7578,7 +7584,8 @@ function bamFormulaConverter() {
                 let content = '';
                 for (const tok of ln) {
                     const sep = (tok.spaceBefore && content) ? '\\ ' : '';
-                    content += sep + (tok.color ? `\\textcolor{${tok.color}}{${tok.w}}` : tok.w);
+                    const w = mathSafe(tok.w);
+            content += sep + (tok.color ? `\\textcolor{${tok.color}}{${w}}` : w);
                 }
                 parts.push(`\\${alignMode}align ` + content);
             }
@@ -7591,7 +7598,8 @@ function bamFormulaConverter() {
         let content = '';
         for (const tok of tokens) {
             const sep = (tok.spaceBefore && content) ? '\\ ' : '';
-            content += sep + (tok.color ? `\\textcolor{${tok.color}}{${tok.w}}` : tok.w);
+            const w = mathSafe(tok.w);
+            content += sep + (tok.color ? `\\textcolor{${tok.color}}{${w}}` : w);
         }
         return `\\${alignMode}align ` + content;
     }
@@ -7666,7 +7674,7 @@ function bamFormulaConverter() {
 
     // 일반 텍스트 → 모든 공백/줄바꿈을 하나로 합치고 문장 단위 + 줄 너비로 분리
     function convertSentences(text, limit) {
-        const flat = mathSafe(stripInvisible(stripEmoji(text))).replace(/\s+/g, ' ').trim();
+        const flat = stripInvisible(stripEmoji(text)).replace(/\s+/g, ' ').trim();
         if (!flat) return '';
         const tokens = flat.split(' ').filter(Boolean).map((w, i) => ({ w, color: null, spaceBefore: i > 0 }));
         if (!tokens.length) return '';
@@ -7680,7 +7688,7 @@ function bamFormulaConverter() {
         for (const s of segs) {
             if (s.text === '\n') { prevTrailingSpace = true; continue; }
             // 이모지·보이지않는문자 제거 + 모든 유니코드 공백(U+00A0 등)을 일반 공백으로 정규화 (□ 방지)
-            const clean = mathSafe(stripInvisible(stripEmoji(s.text))).replace(/\s/g, ' ');
+            const clean = stripInvisible(stripEmoji(s.text)).replace(/\s/g, ' ');
             const chunks = clean.split(' ');
             for (let i = 0; i < chunks.length; i++) {
                 if (!chunks[i]) continue;
