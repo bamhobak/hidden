@@ -1,4 +1,4 @@
-var _bamVersion = "1.0.9.23";
+var _bamVersion = "1.0.9.25";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -7373,6 +7373,18 @@ function bamFormulaConverter() {
             .replace(/[​-‍﻿­]/g, '');
     }
 
+    // 수식에서 특별한 뜻을 갖는 글자를 '그냥 글자'(전각)로 바꾼다.
+    // 안 바꾸면 수식 편집기가 문법으로 읽어서 줄이 깨지거나 사라진다.
+    //   ^ 위첨자 / _ 아래첨자 / % 그 뒤를 통째로 지움 / # 매크로 인수
+    //   & 표 칸 구분 / $ 수식 구분 / { } 묶음 / ~ 붙임 공백 / \\ 명령 시작
+    var MATH_SAFE = {
+        '\\': '＼', '^': '＾', '_': '＿', '%': '％', '#': '＃',
+        '&': '＆', '$': '＄', '{': '｛', '}': '｝', '~': '～'
+    };
+    function mathSafe(s) {
+        return s.replace(/[\\^_%#&${}~]/g, function (ch) { return MATH_SAFE[ch]; });
+    }
+
     // 폭 0 또는 렌더 불가한 서식 문자 제거 (제로폭·방향지정·워드조이너·BOM·소프트하이픈 등)
     function stripInvisible(s) {
         return s.replace(/[\u00AD\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\uFEFF]/g, '');
@@ -7401,7 +7413,7 @@ function bamFormulaConverter() {
     }
 
     function convert(text, limit) {
-        const trimmed = stripInvisible(stripEmoji(text)).trim();
+        const trimmed = mathSafe(stripInvisible(stripEmoji(text))).trim();
         if (!trimmed) return '';
         const lines = trimmed.split('\n');
         const parts = [];
@@ -7505,7 +7517,11 @@ function bamFormulaConverter() {
             if (s.text === '\n') { rawLines.push(cur); cur = []; } else cur.push(s);
         }
         if (cur.length) rawLines.push(cur);
-        if (rawLines.length && rawLines[rawLines.length - 1].every(s => !s.text.trim())) rawLines.pop();
+        // 앞뒤의 빈 줄은 버린다 (서식 없는 경우와 똑같이 맞춤)
+        // 이모지·보이지 않는 문자만 있는 줄도 빈 줄로 친다 (어차피 지워져서 빈 줄이 되므로)
+        const isBlankLine = ls => ls.every(s => !stripInvisible(stripEmoji(s.text)).trim());
+        while (rawLines.length && isBlankLine(rawLines[0])) rawLines.shift();
+        while (rawLines.length && isBlankLine(rawLines[rawLines.length - 1])) rawLines.pop();
 
         const parts = [];
         for (const lineSegs of rawLines) {
@@ -7514,7 +7530,7 @@ function bamFormulaConverter() {
             let prevTrailingSpace = false;
             for (const { text, color } of lineSegs) {
                 // 이모지·보이지않는문자 제거 + 모든 유니코드 공백(U+00A0 등)을 일반 공백으로 정규화 (□ 방지)
-                const clean = stripInvisible(stripEmoji(text)).replace(/\s/g, ' ');
+                const clean = mathSafe(stripInvisible(stripEmoji(text))).replace(/\s/g, ' ');
                 const chunks = clean.split(' ');
                 for (let i = 0; i < chunks.length; i++) {
                     if (!chunks[i]) continue;
@@ -7634,7 +7650,7 @@ function bamFormulaConverter() {
 
     // 일반 텍스트 → 모든 공백/줄바꿈을 하나로 합치고 문장 단위 + 줄 너비로 분리
     function convertSentences(text, limit) {
-        const flat = stripInvisible(stripEmoji(text)).replace(/\s+/g, ' ').trim();
+        const flat = mathSafe(stripInvisible(stripEmoji(text))).replace(/\s+/g, ' ').trim();
         if (!flat) return '';
         const tokens = flat.split(' ').filter(Boolean).map((w, i) => ({ w, color: null, spaceBefore: i > 0 }));
         if (!tokens.length) return '';
@@ -7648,7 +7664,7 @@ function bamFormulaConverter() {
         for (const s of segs) {
             if (s.text === '\n') { prevTrailingSpace = true; continue; }
             // 이모지·보이지않는문자 제거 + 모든 유니코드 공백(U+00A0 등)을 일반 공백으로 정규화 (□ 방지)
-            const clean = stripInvisible(stripEmoji(s.text)).replace(/\s/g, ' ');
+            const clean = mathSafe(stripInvisible(stripEmoji(s.text))).replace(/\s/g, ' ');
             const chunks = clean.split(' ');
             for (let i = 0; i < chunks.length; i++) {
                 if (!chunks[i]) continue;
