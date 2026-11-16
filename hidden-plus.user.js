@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bamhobak new hidden+
 // @namespace    bamhobak
-// @version      1.0.9.25
+// @version      1.0.9.27
 // @description  밤호박 히든 플러스 (히든 삽입 + 텍스트 수식 변환기)
 // @author       bamhobak
 // @match        https://blog.naver.com/*
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 // ===== 본체 (bamhobak.js) =====
-var _bamVersion = "1.0.9.25";
+var _bamVersion = "1.0.9.27";
 var _bamPostUrl = "";
 var _bamNaverId = "";
 var _bamLogNo = "";
@@ -7393,11 +7393,12 @@ function bamFormulaConverter() {
     //   ^ 위첨자 / _ 아래첨자 / % 그 뒤를 통째로 지움 / # 매크로 인수
     //   & 표 칸 구분 / $ 수식 구분 / { } 묶음 / ~ 붙임 공백 / \\ 명령 시작
     var MATH_SAFE = {
-        '\\': '＼', '^': '＾', '_': '＿', '%': '％', '#': '＃',
-        '&': '＆', '$': '＄', '{': '｛', '}': '｝', '~': '～'
+        // 네이버 수식 편집기에서 실제로 깨지는 것만 바꾼다(2026-11-16 확인).
+        // % & # ~ $ 는 그냥 글자로 들어가므로 손대지 않는다.
+        '\\': '＼', '^': '＾', '_': '＿', '{': '｛', '}': '｝'
     };
     function mathSafe(s) {
-        return s.replace(/[\\^_%#&${}~]/g, function (ch) { return MATH_SAFE[ch]; });
+        return s.replace(/[\\^_{}]/g, function (ch) { return MATH_SAFE[ch]; });
     }
 
     // 폭 0 또는 렌더 불가한 서식 문자 제거 (제로폭·방향지정·워드조이너·BOM·소프트하이픈 등)
